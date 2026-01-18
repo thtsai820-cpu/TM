@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>排行榜｜玩遊戲搭好行</title>
+  <meta name="theme-color" content="#0b0c10" />
+  <style>
+    :root{font-family:system-ui,-apple-system,"Noto Sans TC",Segoe UI,Roboto,Arial}
+    body{margin:0;background:#0b0c10;color:#fff}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:980px;margin:0 auto;padding:18px}
+    .card{background:#141622;border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:14px;margin:12px 0;box-shadow:0 10px 28px rgba(0,0,0,.28)}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,.12);
+      padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.03);font-size:12px;opacity:.95}
+    h1{font-size:22px;margin:6px 0 0}
+    h2{font-size:16px;margin:0}
+    .sub{opacity:.86;font-size:13px;line-height:1.65;margin-top:8px}
+    .tiny{font-size:12px;opacity:.82;line-height:1.6}
+    .btn{appearance:none;border:1px solid rgba(255,255,255,.12);background:#1d2140;color:#fff;border-radius:14px;padding:10px 12px;font-weight:900;cursor:pointer}
+    .btn.secondary{background:transparent}
+    .btn.warn{background:#40211d}
+    select,input{width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:#0f1120;color:#fff;font-size:16px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+    table{width:100%;border-collapse:collapse;margin-top:10px}
+    th,td{border-bottom:1px solid rgba(255,255,255,.10);padding:10px 8px;text-align:left;font-size:13px}
+    th{opacity:.9}
+    .muted{opacity:.72}
+    @media(max-width:760px){.grid2{grid-template-columns:1fr}}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+  </style>
+</head>
+<body>
+<div class="wrap">
+  <div class="card">
+    <div class="row">
+      <div>
+        <div class="pill">🏆 排行榜（本機版）</div>
+        <h1>玩遊戲搭好行｜排行榜</h1>
+        <div class="sub">此排行榜存於你的裝置（localStorage）。之後可升級成雲端版。</div>
+      </div>
+      <div class="row" style="justify-content:flex-start">
+        <button class="btn secondary" onclick="goPortal()">⬅ 回 TM 平台</button>
+        <button class="btn" onclick="openFromQuery()">📥 讀取網址成績</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <h2>新增成績</h2>
+      <span class="pill">可手動輸入／或由遊戲自動帶入</span>
+    </div>
+
+    <div class="grid2" style="margin-top:10px">
+      <div>
+        <div class="tiny muted">遊戲</div>
+        <select id="gameKey">
+          <option value="riddle">🧩 即時解謎</option>
+          <option value="stamp">🧾 集章任務</option>
+          <option value="shoot">🎯 景點射擊</option>
+        </select>
+      </div>
+      <div>
+        <div class="tiny muted">站點（可空白）</div>
+        <input id="stopId" placeholder="例如 A03" />
+      </div>
+      <div>
+        <div class="tiny muted">暱稱</div>
+        <input id="player" placeholder="例如 小金門玩家" maxlength="16" />
+      </div>
+      <div>
+        <div class="tiny muted">分數</div>
+        <input id="score" type="number" placeholder="例如 1200（越大越好）" />
+      </div>
+      <div>
+        <div class="tiny muted">時間（秒）</div>
+        <input id="timeSec" type="number" placeholder="例如 83（越小越好）" />
+      </div>
+      <div>
+        <div class="tiny muted">備註（可空白）</div>
+        <input id="note" placeholder="例如 A線挑戰" maxlength="28" />
+      </div>
+    </div>
+
+    <div class="row" style="margin-top:10px;justify-content:flex-start">
+      <button class="btn" onclick="addScoreFromForm()">➕ 送出成績</button>
+      <button class="btn secondary" onclick="fillDemo()">🧪 填入示範</button>
+    </div>
+
+    <div class="notice tiny muted" style="margin-top:10px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;padding:10px;background:rgba(255,255,255,.04)">
+      ✅ 遊戲可用網址帶入：<span class="mono">leaderboard.html?game=riddle&name=Peter&score=1200&time=83&stop=A03</span>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <h2>查看排行榜</h2>
+      <div class="row" style="justify-content:flex-start">
+        <span class="tiny muted">排序依據：</span>
+        <select id="metric" onchange="render()">
+          <option value="time">⏱ 以時間（越小越好）</option>
+          <option value="score">⭐ 以分數（越大越好）</option>
+        </select>
+        <span class="tiny muted">顯示遊戲：</span>
+        <select id="filterGame" onchange="render()">
+          <option value="all">全部</option>
+          <option value="riddle">🧩 即時解謎</option>
+          <option value="stamp">🧾 集章任務</option>
+          <option value="shoot">🎯 景點射擊</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="tableWrap"></div>
+
+    <div class="row" style="margin-top:10px;justify-content:flex-start">
+      <button class="btn secondary" onclick="exportJSON()">📤 匯出JSON</button>
+      <button class="btn warn" onclick="clearAll()">🗑 清空全部</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const PORTAL_URL = "https://thtsai820-cpu.github.io/TM/";
+  const KEY = "tm_leaderboard_v1";
+
+  function goPortal(){ location.href = PORTAL_URL + "?v=" + Date.now(); }
+
+  function load(){
+    try{ return JSON.parse(localStorage.getItem(KEY) || "[]"); }
+    catch(e){ return []; }
+  }
+  function save(arr){
+    localStorage.setItem(KEY, JSON.stringify(arr));
+  }
+
+  // 給遊戲呼叫：submitScore({gameKey, player, score, timeSec, stopId, note})
+  function submitScore(entry){
+    const now = new Date().toISOString();
+    const e = {
+      id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2),
+      ts: now,
+      gameKey: (entry.gameKey || "riddle"),
+      player: (entry.player || "玩家").trim().slice(0,16),
+      stopId: (entry.stopId || "").trim().toUpperCase().slice(0,8),
+      score: isFinite(+entry.score) ? +entry.score : null,
+      timeSec: isFinite(+entry.timeSec) ? +entry.timeSec : null,
+      note: (entry.note || "").trim().slice(0,28)
+    };
+    const arr = load();
+    arr.push(e);
+    save(arr);
+    render();
+    return e;
+  }
+
+  // 從表單新增
+  function addScoreFromForm(){
+    submitScore({
+      gameKey: document.getElementById("gameKey").value,
+      player: document.getElementById("player").value,
+      score: document.getElementById("score").value,
+      timeSec: document.getElementById("timeSec").value,
+      stopId: document.getElementById("stopId").value,
+      note: document.getElementById("note").value
+    });
+    alert("已送出成績（本機保存）");
+  }
+
+  // 從網址讀取（讓遊戲跳轉過來可自動填）
+  function openFromQuery(){
+    const p = new URLSearchParams(location.search);
+    const game = p.get("game");
+    const name = p.get("name");
+    const score = p.get("score");
+    const time = p.get("time");
+    const stop = p.get("stop");
+    const note = p.get("note");
+
+    if(game) document.getElementById("gameKey").value = game;
+    if(stop) document.getElementById("stopId").value = stop;
+    if(name) document.getElementById("player").value = name;
+    if(score) document.getElementById("score").value = score;
+    if(time) document.getElementById("timeSec").value = time;
+    if(note) document.getElementById("note").value = note;
+
+    // 如果有 name 且 (score 或 time) 就自動入榜
+    if(name && (score || time)){
+      submitScore({gameKey: game, player: name, score, timeSec: time, stopId: stop, note});
+      // 清掉 query，避免重整重複入榜
+      history.replaceState({}, "", location.pathname);
+      alert("已從網址成績加入排行榜");
+    }else{
+      alert("已讀取網址參數到表單（若要自動入榜，需帶 name 且 score/time）");
+    }
+  }
+
+  function fillDemo(){
+    document.getElementById("gameKey").value = "riddle";
+    document.getElementById("stopId").value = "A03";
+    document.getElementById("player").value = "小金門玩家";
+    document.getElementById("score").value = 1200;
+    document.getElementById("timeSec").value = 83;
+    document.getElementById("note").value = "A線示範";
+  }
+
+  function labelGame(k){
+    return k==="riddle" ? "🧩 即時解謎" : k==="stamp" ? "🧾 集章" : "🎯 射擊";
+  }
+
+  function render(){
+    const metric = document.getElementById("metric").value; // time or score
+    const filter = document.getElementById("filterGame").value;
+
+    let arr = load();
+    if(filter !== "all") arr = arr.filter(x=>x.gameKey===filter);
+
+    // 排序：time 越小越前；score 越大越前
+    arr.sort((a,b)=>{
+      if(metric==="time"){
+        const at = (a.timeSec ?? Number.POSITIVE_INFINITY);
+        const bt = (b.timeSec ?? Number.POSITIVE_INFINITY);
+        if(at!==bt) return at-bt;
+        const as = (b.score ?? -1) - (a.score ?? -1);
+        if(as!==0) return as;
+        return (b.ts||"").localeCompare(a.ts||"");
+      }else{
+        const as = (b.score ?? -1) - (a.score ?? -1);
+        if(as!==0) return as;
+        const at = (a.timeSec ?? Number.POSITIVE_INFINITY) - (b.timeSec ?? Number.POSITIVE_INFINITY);
+        if(at!==0) return at;
+        return (b.ts||"").localeCompare(a.ts||"");
+      }
+    });
+
+    // 只顯示前 50
+    arr = arr.slice(0,50);
+
+    const rows = arr.map((x,i)=>`
+      <tr>
+        <td>${i+1}</td>
+        <td>${labelGame(x.gameKey)}</td>
+        <td>${escapeHtml(x.player)}</td>
+        <td>${x.stopId ? escapeHtml(x.stopId) : '<span class="muted">—</span>'}</td>
+        <td>${x.score ?? '<span class="muted">—</span>'}</td>
+        <td>${x.timeSec ?? '<span class="muted">—</span>'}</td>
+        <td class="muted">${new Date(x.ts).toLocaleString()}</td>
+        <td class="muted">${x.note ? escapeHtml(x.note) : '—'}</td>
+      </tr>
+    `).join("");
+
+    document.getElementById("tableWrap").innerHTML = `
+      <table>
+        <thead>
+          <tr>
+            <th>#</th><th>遊戲</th><th>暱稱</th><th>站點</th><th>分數</th><th>時間(秒)</th><th>時間</th><th>備註</th>
+          </tr>
+        </thead>
+        <tbody>
+          ${rows || `<tr><td colspan="8" class="muted">尚無成績。你可以先按「填入示範」→「送出成績」。</td></tr>`}
+        </tbody>
+      </table>
+      <div class="tiny muted" style="margin-top:8px">※ 本機版：不同手機/瀏覽器不共享資料。未來可升級雲端排行榜。</div>
+    `;
+  }
+
+  function exportJSON(){
+    const data = localStorage.getItem(KEY) || "[]";
+    // 直接彈出讓你複製
+    const w = window.open("", "_blank");
+    w.document.write(`<pre style="white-space:pre-wrap;word-break:break-word">${escapeHtml(data)}</pre>`);
+    w.document.close();
+  }
+
+  function clearAll(){
+    if(confirm("確定要清空全部排行榜資料？（只會清你這台裝置）")){
+      localStorage.removeItem(KEY);
+      render();
+    }
+  }
+
+  function escapeHtml(s){
+    return String(s).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
+  }
+
+  // 初始渲染
+  render();
+</script>
+</body>
+</html>
