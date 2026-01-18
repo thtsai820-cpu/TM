@@ -3,290 +3,417 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>排行榜｜玩遊戲搭好行</title>
+  <title>台灣好行金門｜排行榜</title>
   <meta name="theme-color" content="#0b0c10" />
   <style>
-    :root{font-family:system-ui,-apple-system,"Noto Sans TC",Segoe UI,Roboto,Arial}
-    body{margin:0;background:#0b0c10;color:#fff}
+    :root{
+      font-family: system-ui, -apple-system, "Noto Sans TC", Segoe UI, Roboto, Arial;
+      --bg:#0b0c10; --card:#141622; --line:rgba(255,255,255,.10);
+      --muted:rgba(255,255,255,.78); --soft:rgba(255,255,255,.06);
+      --pri:#7aa2ff; --good:#35d07f; --warn:#ffb86b;
+    }
+    body{margin:0;background:var(--bg);color:#fff}
     a{color:inherit;text-decoration:none}
     .wrap{max-width:980px;margin:0 auto;padding:18px}
-    .card{background:#141622;border:1px solid rgba(255,255,255,.10);border-radius:18px;padding:14px;margin:12px 0;box-shadow:0 10px 28px rgba(0,0,0,.28)}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:14px;margin:12px 0;box-shadow:0 10px 28px rgba(0,0,0,.28)}
     .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid rgba(255,255,255,.12);
-      padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.03);font-size:12px;opacity:.95}
+    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.03);font-size:12px;opacity:.95}
     h1{font-size:22px;margin:6px 0 0}
     h2{font-size:16px;margin:0}
-    .sub{opacity:.86;font-size:13px;line-height:1.65;margin-top:8px}
-    .tiny{font-size:12px;opacity:.82;line-height:1.6}
-    .btn{appearance:none;border:1px solid rgba(255,255,255,.12);background:#1d2140;color:#fff;border-radius:14px;padding:10px 12px;font-weight:900;cursor:pointer}
+    .sub{opacity:.86;font-size:13px;line-height:1.6;margin-top:8px}
+    .tiny{font-size:12px;opacity:.86;line-height:1.6}
+    .btn{
+      appearance:none;border:1px solid rgba(255,255,255,.12);
+      background:#1d2140;color:#fff;border-radius:14px;
+      padding:10px 12px;font-weight:900;cursor:pointer
+    }
     .btn.secondary{background:transparent}
+    .btn.good{background:#1f3d2c}
     .btn.warn{background:#40211d}
-    select,input{width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:#0f1120;color:#fff;font-size:16px}
-    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    table{width:100%;border-collapse:collapse;margin-top:10px}
-    th,td{border-bottom:1px solid rgba(255,255,255,.10);padding:10px 8px;text-align:left;font-size:13px}
-    th{opacity:.9}
-    .muted{opacity:.72}
-    @media(max-width:760px){.grid2{grid-template-columns:1fr}}
-    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    input,select{
+      width:100%;padding:10px 12px;border-radius:12px;
+      border:1px solid rgba(255,255,255,.15);background:#0f1120;color:#fff;font-size:16px
+    }
+    table{width:100%;border-collapse:collapse}
+    th,td{border-bottom:1px solid rgba(255,255,255,.10);padding:10px 8px;text-align:left}
+    th{font-size:12px;opacity:.8}
+    td{font-size:14px}
+    .rank{font-weight:1000}
+    .goodTxt{color:var(--good)}
+    .warnTxt{color:var(--warn)}
+    .right{text-align:right}
+    .muted{opacity:.75}
+    .grid2{display:grid;grid-template-columns:1.2fr .8fr;gap:10px}
+    @media (max-width:860px){.grid2{grid-template-columns:1fr}}
+    .toast{
+      position:fixed;left:50%;transform:translateX(-50%);
+      bottom:16px;background:rgba(20,22,34,.95);
+      border:1px solid rgba(255,255,255,.12);border-radius:14px;
+      padding:10px 12px;max-width:92vw;display:none
+    }
+    .k{display:inline-block;border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:2px 8px;font-size:12px;opacity:.9}
   </style>
 </head>
+
 <body>
-<div class="wrap">
-  <div class="card">
-    <div class="row">
-      <div>
-        <div class="pill">🏆 排行榜（本機版）</div>
-        <h1>玩遊戲搭好行｜排行榜</h1>
-        <div class="sub">此排行榜存於你的裝置（localStorage）。之後可升級成雲端版。</div>
-      </div>
-      <div class="row" style="justify-content:flex-start">
-        <button class="btn secondary" onclick="goPortal()">⬅ 回 TM 平台</button>
-        <button class="btn" onclick="openFromQuery()">📥 讀取網址成績</button>
+  <div class="wrap">
+
+    <div class="card">
+      <div class="row">
+        <div>
+          <div class="pill">🏆 台灣好行金門｜排行榜</div>
+          <h1>玩遊戲搭好行｜成績榜（本機示範）</h1>
+          <div class="sub">
+            這版是 <b>純前端</b> 的示範排行榜：會把玩家成績存到你的瀏覽器（localStorage）。<br/>
+            之後若要「全體共用」排行榜，可以再改成 Google Sheet / Firebase / 後端 API。
+          </div>
+        </div>
+        <div class="row" style="justify-content:flex-start">
+          <button class="btn secondary" id="backBtn">⬅ 回 TM 首頁</button>
+          <button class="btn secondary" id="copyLinkBtn">🔗 複製本頁連結</button>
+        </div>
       </div>
     </div>
+
+    <div class="grid2">
+      <div class="card" style="margin:0">
+        <h2>① 讀取成績（從遊戲跳轉帶入）</h2>
+        <div class="tiny muted" style="margin-top:8px">
+          若你是從遊戲完成畫面跳過來，本頁會自動把分數寫入排行榜。也可手動新增。
+        </div>
+
+        <div style="margin-top:12px">
+          <div class="row" style="align-items:flex-end">
+            <div style="flex:1;min-width:180px">
+              <div class="tiny muted">玩家暱稱</div>
+              <input id="nameInput" placeholder="例如：阿金 / KinmenHero" />
+            </div>
+            <div style="width:140px">
+              <div class="tiny muted">遊戲</div>
+              <select id="gameSelect">
+                <option value="riddle">🧩 即時解謎</option>
+                <option value="stamp">🧾 集章任務</option>
+                <option value="shoot">🎯 景點射擊</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:10px;align-items:flex-end">
+            <div style="width:140px">
+              <div class="tiny muted">分數</div>
+              <input id="scoreInput" inputmode="numeric" placeholder="0" />
+            </div>
+            <div style="width:140px">
+              <div class="tiny muted">時間（秒）</div>
+              <input id="timeInput" inputmode="numeric" placeholder="0" />
+            </div>
+            <div style="flex:1;min-width:180px">
+              <div class="tiny muted">站點/備註（可空）</div>
+              <input id="noteInput" placeholder="例如：A10 / 金城車站 / A線完成" />
+            </div>
+          </div>
+
+          <div class="row" style="margin-top:12px;justify-content:flex-start">
+            <button class="btn good" id="addBtn">➕ 新增/送出成績</button>
+            <button class="btn secondary" id="clearParamBtn">🧹 清掉網址參數</button>
+          </div>
+
+          <div class="tiny muted" style="margin-top:10px">
+            你也可以從遊戲用這種方式跳轉：<span class="k">?game=riddle&name=Peter&score=120&time=95&stop=A10</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin:0">
+        <h2>② 排行榜設定</h2>
+        <div class="tiny muted" style="margin-top:8px">排序規則：<b>分數高優先</b>，分數相同則 <b>時間短優先</b>。</div>
+
+        <div style="margin-top:12px">
+          <div class="tiny muted">查看遊戲</div>
+          <select id="filterSelect" style="margin-top:6px">
+            <option value="all">全部遊戲</option>
+            <option value="riddle">🧩 即時解謎</option>
+            <option value="stamp">🧾 集章任務</option>
+            <option value="shoot">🎯 景點射擊</option>
+          </select>
+        </div>
+
+        <div style="margin-top:12px">
+          <div class="tiny muted">只看最近幾天</div>
+          <select id="daysSelect" style="margin-top:6px">
+            <option value="9999">不限制</option>
+            <option value="7">近 7 天</option>
+            <option value="30">近 30 天</option>
+          </select>
+        </div>
+
+        <div class="row" style="margin-top:12px;justify-content:flex-start">
+          <button class="btn warn" id="wipeBtn">🗑️ 清空排行榜（此裝置）</button>
+        </div>
+
+        <div class="tiny muted" style="margin-top:10px">
+          ⚠️ 目前是「每台手機自己一份榜」。若你要「大家共用同一榜」，我可以下一步改成 Google Sheet / Firebase。
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="row">
+        <h2>③ 排行榜</h2>
+        <div class="pill" id="countPill">—</div>
+      </div>
+
+      <div style="margin-top:10px;overflow:auto">
+        <table>
+          <thead>
+            <tr>
+              <th style="width:64px">名次</th>
+              <th>玩家</th>
+              <th style="width:140px">遊戲</th>
+              <th class="right" style="width:110px">分數</th>
+              <th class="right" style="width:110px">時間</th>
+              <th>站點/備註</th>
+              <th style="width:170px">時間戳</th>
+            </tr>
+          </thead>
+          <tbody id="tbody">
+            <tr><td colspan="7" class="muted">尚無成績。去玩一局再回來吧！</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div class="tiny muted" style="margin-top:10px">
+        小技巧：你可以在 TM 首頁做一個「排行榜」按鈕，導向本頁。
+      </div>
+    </div>
+
   </div>
 
-  <div class="card">
-    <div class="row">
-      <h2>新增成績</h2>
-      <span class="pill">可手動輸入／或由遊戲自動帶入</span>
-    </div>
-
-    <div class="grid2" style="margin-top:10px">
-      <div>
-        <div class="tiny muted">遊戲</div>
-        <select id="gameKey">
-          <option value="riddle">🧩 即時解謎</option>
-          <option value="stamp">🧾 集章任務</option>
-          <option value="shoot">🎯 景點射擊</option>
-        </select>
-      </div>
-      <div>
-        <div class="tiny muted">站點（可空白）</div>
-        <input id="stopId" placeholder="例如 A03" />
-      </div>
-      <div>
-        <div class="tiny muted">暱稱</div>
-        <input id="player" placeholder="例如 小金門玩家" maxlength="16" />
-      </div>
-      <div>
-        <div class="tiny muted">分數</div>
-        <input id="score" type="number" placeholder="例如 1200（越大越好）" />
-      </div>
-      <div>
-        <div class="tiny muted">時間（秒）</div>
-        <input id="timeSec" type="number" placeholder="例如 83（越小越好）" />
-      </div>
-      <div>
-        <div class="tiny muted">備註（可空白）</div>
-        <input id="note" placeholder="例如 A線挑戰" maxlength="28" />
-      </div>
-    </div>
-
-    <div class="row" style="margin-top:10px;justify-content:flex-start">
-      <button class="btn" onclick="addScoreFromForm()">➕ 送出成績</button>
-      <button class="btn secondary" onclick="fillDemo()">🧪 填入示範</button>
-    </div>
-
-    <div class="notice tiny muted" style="margin-top:10px;border:1px dashed rgba(255,255,255,.18);border-radius:14px;padding:10px;background:rgba(255,255,255,.04)">
-      ✅ 遊戲可用網址帶入：<span class="mono">leaderboard.html?game=riddle&name=Peter&score=1200&time=83&stop=A03</span>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="row">
-      <h2>查看排行榜</h2>
-      <div class="row" style="justify-content:flex-start">
-        <span class="tiny muted">排序依據：</span>
-        <select id="metric" onchange="render()">
-          <option value="time">⏱ 以時間（越小越好）</option>
-          <option value="score">⭐ 以分數（越大越好）</option>
-        </select>
-        <span class="tiny muted">顯示遊戲：</span>
-        <select id="filterGame" onchange="render()">
-          <option value="all">全部</option>
-          <option value="riddle">🧩 即時解謎</option>
-          <option value="stamp">🧾 集章任務</option>
-          <option value="shoot">🎯 景點射擊</option>
-        </select>
-      </div>
-    </div>
-
-    <div id="tableWrap"></div>
-
-    <div class="row" style="margin-top:10px;justify-content:flex-start">
-      <button class="btn secondary" onclick="exportJSON()">📤 匯出JSON</button>
-      <button class="btn warn" onclick="clearAll()">🗑 清空全部</button>
-    </div>
-  </div>
-</div>
+  <div class="toast" id="toast"></div>
 
 <script>
-  const PORTAL_URL = "https://thtsai820-cpu.github.io/TM/";
-  const KEY = "tm_leaderboard_v1";
+(function(){
+  var PORTAL_URL = "https://thtsai820-cpu.github.io/TM/";
+  var KEY = "tm_leaderboard_v1";
 
-  function goPortal(){ location.href = PORTAL_URL + "?v=" + Date.now(); }
+  function $(id){ return document.getElementById(id); }
+  function nowISO(){ return new Date().toISOString(); }
+  function safeNum(v){
+    var n = parseInt(String(v||"").replace(/[^\d]/g,""), 10);
+    return isNaN(n) ? 0 : n;
+  }
+  function safeText(v, maxLen){
+    var s = String(v||"").trim();
+    if(maxLen && s.length > maxLen) s = s.slice(0, maxLen);
+    return s;
+  }
+  function gameLabel(game){
+    if(game==="riddle") return "🧩 即時解謎";
+    if(game==="stamp") return "🧾 集章任務";
+    if(game==="shoot") return "🎯 景點射擊";
+    return game || "-";
+  }
+  function toast(msg){
+    var t = $("toast");
+    if(!t) return;
+    t.textContent = msg;
+    t.style.display = "block";
+    clearTimeout(toast._timer);
+    toast._timer = setTimeout(function(){ t.style.display = "none"; }, 2200);
+  }
 
   function load(){
-    try{ return JSON.parse(localStorage.getItem(KEY) || "[]"); }
-    catch(e){ return []; }
+    try{
+      var raw = localStorage.getItem(KEY);
+      var arr = raw ? JSON.parse(raw) : [];
+      if(!Array.isArray(arr)) arr = [];
+      return arr;
+    }catch(e){
+      return [];
+    }
   }
   function save(arr){
     localStorage.setItem(KEY, JSON.stringify(arr));
   }
 
-  // 給遊戲呼叫：submitScore({gameKey, player, score, timeSec, stopId, note})
-  function submitScore(entry){
-    const now = new Date().toISOString();
-    const e = {
-      id: crypto?.randomUUID ? crypto.randomUUID() : String(Date.now()) + Math.random().toString(16).slice(2),
-      ts: now,
-      gameKey: (entry.gameKey || "riddle"),
-      player: (entry.player || "玩家").trim().slice(0,16),
-      stopId: (entry.stopId || "").trim().toUpperCase().slice(0,8),
-      score: isFinite(+entry.score) ? +entry.score : null,
-      timeSec: isFinite(+entry.timeSec) ? +entry.timeSec : null,
-      note: (entry.note || "").trim().slice(0,28)
-    };
-    const arr = load();
-    arr.push(e);
+  function upsertEntry(entry){
+    var arr = load();
+    arr.push(entry);
     save(arr);
-    render();
-    return e;
   }
 
-  // 從表單新增
-  function addScoreFromForm(){
-    submitScore({
-      gameKey: document.getElementById("gameKey").value,
-      player: document.getElementById("player").value,
-      score: document.getElementById("score").value,
-      timeSec: document.getElementById("timeSec").value,
-      stopId: document.getElementById("stopId").value,
-      note: document.getElementById("note").value
-    });
-    alert("已送出成績（本機保存）");
+  function getParams(){
+    var p = new URLSearchParams(location.search);
+    return {
+      game: safeText(p.get("game") || "", 20),
+      name: safeText(p.get("name") || "", 20),
+      score: safeNum(p.get("score")),
+      time: safeNum(p.get("time")),
+      stop: safeText(p.get("stop") || "", 30),
+      note: safeText(p.get("note") || "", 60)
+    };
   }
 
-  // 從網址讀取（讓遊戲跳轉過來可自動填）
-  function openFromQuery(){
-    const p = new URLSearchParams(location.search);
-    const game = p.get("game");
-    const name = p.get("name");
-    const score = p.get("score");
-    const time = p.get("time");
-    const stop = p.get("stop");
-    const note = p.get("note");
+  function clearQuery(){
+    var url = location.origin + location.pathname;
+    history.replaceState({}, "", url);
+  }
 
-    if(game) document.getElementById("gameKey").value = game;
-    if(stop) document.getElementById("stopId").value = stop;
-    if(name) document.getElementById("player").value = name;
-    if(score) document.getElementById("score").value = score;
-    if(time) document.getElementById("timeSec").value = time;
-    if(note) document.getElementById("note").value = note;
+  function sameSubmissionKey(params){
+    // 用這個 key 來避免「同一頁重整就一直入榜」
+    return [
+      params.game, params.name, params.score, params.time,
+      params.stop || params.note || ""
+    ].join("|");
+  }
 
-    // 如果有 name 且 (score 或 time) 就自動入榜
-    if(name && (score || time)){
-      submitScore({gameKey: game, player: name, score, timeSec: time, stopId: stop, note});
-      // 清掉 query，避免重整重複入榜
-      history.replaceState({}, "", location.pathname);
-      alert("已從網址成績加入排行榜");
-    }else{
-      alert("已讀取網址參數到表單（若要自動入榜，需帶 name 且 score/time）");
+  function maybeAutoAddFromParams(){
+    var params = getParams();
+    if(!params.game || !params.score) return;
+
+    // 防止重整重複新增
+    var submitKey = sameSubmissionKey(params);
+    try{
+      var lastKey = sessionStorage.getItem("tm_last_submit_key");
+      if(lastKey === submitKey) return;
+      sessionStorage.setItem("tm_last_submit_key", submitKey);
+    }catch(e){}
+
+    var entry = {
+      id: "e_" + Math.random().toString(16).slice(2) + "_" + Date.now(),
+      game: params.game || "riddle",
+      name: params.name || "玩家",
+      score: params.score,
+      time: params.time || 0,
+      note: (params.stop ? ("站點：" + params.stop) : "") + (params.note ? ("｜" + params.note) : ""),
+      ts: nowISO()
+    };
+    upsertEntry(entry);
+    toast("已寫入排行榜： " + entry.name + " / " + gameLabel(entry.game));
+  }
+
+  function filteredSorted(){
+    var arr = load();
+    var filter = $("filterSelect").value;
+    var days = parseInt($("daysSelect").value, 10);
+
+    if(filter !== "all"){
+      arr = arr.filter(function(x){ return x && x.game === filter; });
     }
-  }
+    if(days && days !== 9999){
+      var cutoff = Date.now() - days*24*60*60*1000;
+      arr = arr.filter(function(x){
+        var t = Date.parse(x.ts || "");
+        return !isNaN(t) && t >= cutoff;
+      });
+    }
 
-  function fillDemo(){
-    document.getElementById("gameKey").value = "riddle";
-    document.getElementById("stopId").value = "A03";
-    document.getElementById("player").value = "小金門玩家";
-    document.getElementById("score").value = 1200;
-    document.getElementById("timeSec").value = 83;
-    document.getElementById("note").value = "A線示範";
-  }
+    // 排序：分數 DESC, 時間 ASC, 時間戳 DESC
+    arr.sort(function(a,b){
+      var s = (b.score||0) - (a.score||0);
+      if(s !== 0) return s;
+      var t = (a.time||0) - (b.time||0);
+      if(t !== 0) return t;
+      return Date.parse(b.ts||"") - Date.parse(a.ts||"");
+    });
 
-  function labelGame(k){
-    return k==="riddle" ? "🧩 即時解謎" : k==="stamp" ? "🧾 集章" : "🎯 射擊";
+    return arr;
   }
 
   function render(){
-    const metric = document.getElementById("metric").value; // time or score
-    const filter = document.getElementById("filterGame").value;
-
-    let arr = load();
-    if(filter !== "all") arr = arr.filter(x=>x.gameKey===filter);
-
-    // 排序：time 越小越前；score 越大越前
-    arr.sort((a,b)=>{
-      if(metric==="time"){
-        const at = (a.timeSec ?? Number.POSITIVE_INFINITY);
-        const bt = (b.timeSec ?? Number.POSITIVE_INFINITY);
-        if(at!==bt) return at-bt;
-        const as = (b.score ?? -1) - (a.score ?? -1);
-        if(as!==0) return as;
-        return (b.ts||"").localeCompare(a.ts||"");
-      }else{
-        const as = (b.score ?? -1) - (a.score ?? -1);
-        if(as!==0) return as;
-        const at = (a.timeSec ?? Number.POSITIVE_INFINITY) - (b.timeSec ?? Number.POSITIVE_INFINITY);
-        if(at!==0) return at;
-        return (b.ts||"").localeCompare(a.ts||"");
-      }
-    });
-
-    // 只顯示前 50
-    arr = arr.slice(0,50);
-
-    const rows = arr.map((x,i)=>`
-      <tr>
-        <td>${i+1}</td>
-        <td>${labelGame(x.gameKey)}</td>
-        <td>${escapeHtml(x.player)}</td>
-        <td>${x.stopId ? escapeHtml(x.stopId) : '<span class="muted">—</span>'}</td>
-        <td>${x.score ?? '<span class="muted">—</span>'}</td>
-        <td>${x.timeSec ?? '<span class="muted">—</span>'}</td>
-        <td class="muted">${new Date(x.ts).toLocaleString()}</td>
-        <td class="muted">${x.note ? escapeHtml(x.note) : '—'}</td>
-      </tr>
-    `).join("");
-
-    document.getElementById("tableWrap").innerHTML = `
-      <table>
-        <thead>
-          <tr>
-            <th>#</th><th>遊戲</th><th>暱稱</th><th>站點</th><th>分數</th><th>時間(秒)</th><th>時間</th><th>備註</th>
-          </tr>
-        </thead>
-        <tbody>
-          ${rows || `<tr><td colspan="8" class="muted">尚無成績。你可以先按「填入示範」→「送出成績」。</td></tr>`}
-        </tbody>
-      </table>
-      <div class="tiny muted" style="margin-top:8px">※ 本機版：不同手機/瀏覽器不共享資料。未來可升級雲端排行榜。</div>
-    `;
-  }
-
-  function exportJSON(){
-    const data = localStorage.getItem(KEY) || "[]";
-    // 直接彈出讓你複製
-    const w = window.open("", "_blank");
-    w.document.write(`<pre style="white-space:pre-wrap;word-break:break-word">${escapeHtml(data)}</pre>`);
-    w.document.close();
-  }
-
-  function clearAll(){
-    if(confirm("確定要清空全部排行榜資料？（只會清你這台裝置）")){
-      localStorage.removeItem(KEY);
-      render();
+    var arr = filteredSorted();
+    $("countPill").textContent = "共 " + arr.length + " 筆";
+    var tb = $("tbody");
+    if(!arr.length){
+      tb.innerHTML = '<tr><td colspan="7" class="muted">尚無成績。去玩一局再回來吧！</td></tr>';
+      return;
     }
+
+    var html = "";
+    for(var i=0;i<Math.min(arr.length, 100);i++){
+      var x = arr[i] || {};
+      html += "<tr>" +
+        "<td class='rank'>" + (i+1) + "</td>" +
+        "<td>" + escapeHtml(x.name||"玩家") + "</td>" +
+        "<td>" + escapeHtml(gameLabel(x.game)) + "</td>" +
+        "<td class='right goodTxt'>" + (x.score||0) + "</td>" +
+        "<td class='right'>" + (x.time||0) + "s</td>" +
+        "<td>" + escapeHtml(x.note||"-") + "</td>" +
+        "<td class='tiny muted'>" + escapeHtml(x.ts||"-") + "</td>" +
+      "</tr>";
+    }
+    tb.innerHTML = html;
   }
 
   function escapeHtml(s){
-    return String(s).replace(/[&<>"']/g, m=>({ "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;" }[m]));
+    return String(s||"")
+      .replace(/&/g,"&amp;")
+      .replace(/</g,"&lt;")
+      .replace(/>/g,"&gt;")
+      .replace(/"/g,"&quot;")
+      .replace(/'/g,"&#39;");
   }
 
-  // 初始渲染
+  // --- bind UI ---
+  $("backBtn").onclick = function(){ location.href = PORTAL_URL + "?v=" + Date.now(); };
+  $("copyLinkBtn").onclick = function(){
+    var url = location.href;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(url).then(function(){ toast("已複製連結"); }).catch(function(){ toast(url); });
+    }else{
+      toast(url);
+      prompt("複製連結：", url);
+    }
+  };
+
+  $("clearParamBtn").onclick = function(){
+    clearQuery();
+    toast("已清掉網址參數");
+  };
+
+  $("addBtn").onclick = function(){
+    var entry = {
+      id: "e_" + Math.random().toString(16).slice(2) + "_" + Date.now(),
+      game: $("gameSelect").value || "riddle",
+      name: safeText($("nameInput").value || "玩家", 20) || "玩家",
+      score: safeNum($("scoreInput").value),
+      time: safeNum($("timeInput").value),
+      note: safeText($("noteInput").value, 60),
+      ts: nowISO()
+    };
+    if(!entry.score){
+      toast("請至少填分數（score）");
+      return;
+    }
+    upsertEntry(entry);
+    toast("已新增成績");
+    render();
+  };
+
+  $("wipeBtn").onclick = function(){
+    if(confirm("確定要清空此裝置的排行榜嗎？（不可復原）")){
+      localStorage.removeItem(KEY);
+      toast("已清空排行榜");
+      render();
+    }
+  };
+
+  $("filterSelect").onchange = render;
+  $("daysSelect").onchange = render;
+
+  // --- init: 先從參數自動寫入，再帶入表單 ---
+  var params = getParams();
+  if(params.name) $("nameInput").value = params.name;
+  if(params.game) $("gameSelect").value = params.game;
+  if(params.score) $("scoreInput").value = String(params.score);
+  if(params.time) $("timeInput").value = String(params.time);
+  if(params.stop || params.note){
+    $("noteInput").value = (params.stop ? ("站點：" + params.stop) : "") + (params.note ? ("｜" + params.note) : "");
+  }
+
+  maybeAutoAddFromParams();
   render();
+})();
 </script>
 </body>
 </html>
