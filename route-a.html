@@ -109,6 +109,73 @@
 </div>
 <!-- ===== 路線圖結束 ===== -->
 
+  <div class="card" id="stops">
+  <div class="row">
+    <h2>📍 A線站點任務（點站就能玩）</h2>
+    <span class="pill">三遊戲一鍵導流</span>
+  </div>
+  <div class="sub">
+    選一站 → 車上玩解謎、下車集章、空檔射擊。之後可再加入「停留時間/兌換店家」。
+  </div>
+
+  <div id="stopList" style="margin-top:12px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px"></div>
+
+  <div class="notice" style="margin-top:12px">
+    <div class="tiny">
+      ✅ 目前先用「URL 參數」傳遞站點（例如 <b>?stop=A01</b>）。<br/>
+      你下一步只要在三個遊戲各自讀取 <b>stop</b> 參數，就能自動切到該站關卡/背景。
+    </div>
+  </div>
+</div>
+
+<script>
+  // === 這裡請保持與 route-a.html 內的 GAME_LINKS 一致 ===
+  const GAME_LINKS2 = {
+    riddle: "https://thtsai820-cpu.github.io/mystery/",
+    stamp:  "https://thtsai820-cpu.github.io/Tour/",
+    shoot:  "https://thtsai820-cpu.github.io/car-race/"
+  };
+
+  // A線站點（先用示範版；你給我完整站序我可以一次補齊）
+  const A_STOPS = [
+    { id:"A01", name:"金城車站", hint:"建議先開即時解謎，讓搭乘變成主線任務。", mapRef:"起點" },
+    { id:"A02", name:"莒光樓", hint:"地標打卡點：拍照＋完成一關解謎。", mapRef:"地標" },
+    { id:"A03", name:"水頭聚落", hint:"下車走讀最適合：在聚落完成集章任務。", mapRef:"聚落" },
+    { id:"A04", name:"翟山坑道", hint:"沉浸感很強：主線關卡＋空檔射擊。", mapRef:"坑道" }
+  ];
+
+  const list = document.getElementById("stopList");
+
+  function openGame(baseUrl, stopId){
+    const url = new URL(baseUrl);
+    url.searchParams.set("stop", stopId);     // 站點代碼
+    url.searchParams.set("v", Date.now());    // 避快取
+    window.open(url.toString(), "_blank", "noopener,noreferrer");
+  }
+
+  A_STOPS.forEach((s, idx)=>{
+    const card = document.createElement("div");
+    card.style.cssText = "border:1px solid rgba(255,255,255,.10);border-radius:16px;padding:12px;background:rgba(255,255,255,.03)";
+    card.innerHTML = `
+      <div class="pill">第 ${idx+1} 站｜${s.id}</div>
+      <div style="margin-top:8px;font-weight:900">${s.name}</div>
+      <div class="tiny" style="margin-top:6px">${s.hint}</div>
+      <div class="tiny" style="margin-top:8px;opacity:.85">路線圖標示：${s.mapRef}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:10px">
+        <button class="btn pri" onclick="openGame(GAME_LINKS2.riddle,'${s.id}')">🧩 解謎（車上）</button>
+        <button class="btn" onclick="openGame(GAME_LINKS2.stamp,'${s.id}')">🧾 集章（下車）</button>
+        <button class="btn secondary" onclick="openGame(GAME_LINKS2.shoot,'${s.id}')">🎯 射擊（空檔）</button>
+      </div>
+    `;
+    list.appendChild(card);
+  });
+
+  // RWD：手機變單欄
+  if (window.matchMedia("(max-width: 860px)").matches){
+    list.style.gridTemplateColumns = "1fr";
+  }
+</script>
+
   
   <!-- Hero -->
   <div class="card">
