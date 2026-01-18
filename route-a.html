@@ -3,99 +3,247 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>A線怎麼搭｜玩遊戲搭好行</title>
-
+<title>台灣好行金門縣 A線｜官方導覽｜玩遊戲搭好行</title>
+<meta name="theme-color" content="#0b0c10" />
 <style>
-body{margin:0;background:#0b0c10;color:#fff;font-family:system-ui,-apple-system,'Noto Sans TC'}
-.wrap{max-width:900px;margin:0 auto;padding:16px}
-.card{background:#141622;border:1px solid rgba(255,255,255,.12);border-radius:16px;padding:14px;margin:12px 0}
-.pill{display:inline-block;border:1px solid rgba(255,255,255,.18);padding:4px 8px;border-radius:999px;font-size:12px}
-.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-between}
-.btn{border:1px solid rgba(255,255,255,.18);background:#1d2140;color:#fff;
-     border-radius:12px;padding:8px 10px;cursor:pointer}
-.stop{border-left:3px solid #7aa2ff;padding:8px 10px;margin:8px 0;background:rgba(255,255,255,.04)}
-.muted{opacity:.8;font-size:13px}
+  :root{
+    font-family: system-ui, -apple-system, "Noto Sans TC", Segoe UI, Roboto, Arial;
+    --bg:#0b0c10; --card:#141622; --line:rgba(255,255,255,.10);
+    --muted:rgba(255,255,255,.78); --pri:#7aa2ff; --soft:rgba(255,255,255,.06);
+  }
+  body{margin:0;background:var(--bg);color:#fff}
+  a{color:inherit;text-decoration:none}
+  .wrap{max-width:980px;margin:0 auto;padding:18px}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:14px 0;box-shadow:0 10px 28px rgba(0,0,0,.28)}
+  .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+  .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);
+        padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.03);
+        font-size:12px;opacity:.95}
+  h1{font-size:26px;margin:10px 0 0}
+  h2{font-size:16px;margin:0}
+  h3{font-size:14px;margin:0}
+  .sub{color:var(--muted);font-size:13px;line-height:1.7;margin-top:8px}
+  .tiny{color:var(--muted);font-size:12px;line-height:1.6}
+  .btn{appearance:none;border:1px solid var(--line);background:#1d2140;color:#fff;
+       border-radius:14px;padding:10px 12px;font-weight:900;cursor:pointer}
+  .btn.secondary{background:transparent}
+  .btn.pri{background:var(--pri);color:#0b0c10;border-color:rgba(0,0,0,.15)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+  .hr{height:1px;background:rgba(255,255,255,.08);margin:12px 0}
+  .notice{background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.18);border-radius:14px;padding:12px}
+  .step{border:1px solid var(--line);border-radius:16px;padding:12px;background:rgba(255,255,255,.03)}
+  .tag{display:inline-block;margin-right:6px;margin-top:6px;border:1px solid var(--line);padding:4px 8px;border-radius:999px;font-size:12px;opacity:.9}
+  .stop{border:1px solid var(--line);border-radius:16px;padding:12px;background:rgba(255,255,255,.03)}
+  .stop b{font-size:14px}
+  .k{opacity:.9;font-weight:900}
+  .topbar{
+    position:sticky; top:0; z-index:9999;
+    background:#141622; border-bottom:1px solid rgba(255,255,255,.12);
+    padding:10px 12px;
+  }
+  @media (max-width:860px){.grid2{grid-template-columns:1fr}.grid3{grid-template-columns:1fr}}
 </style>
 </head>
-
 <body>
 
-<!-- 回平台 -->
-<div class="card">
-  <div class="row">
-    <div>
-      <span class="pill">🚌 A線</span>
-      <span class="pill">搭乘指引</span>
+<script>
+  // 入口平台（TM）與三個遊戲連結（你若改 repo 名稱，改這裡即可）
+  const PORTAL_URL = "https://thtsai820-cpu.github.io/TM/";
+  const GAME_LINKS = {
+    riddle: "https://thtsai820-cpu.github.io/mystery/",
+    stamp:  "https://thtsai820-cpu.github.io/Tour/",
+    shoot:  "https://thtsai820-cpu.github.io/car-race/"
+  };
+</script>
+
+<!-- Topbar -->
+<div class="topbar">
+  <div style="max-width:980px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between">
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span class="pill">🚌 台灣好行金門縣</span>
+      <span class="pill">A線官方導覽</span>
+      <span class="tiny">玩遊戲搭好行｜金門樂遊一票到底</span>
     </div>
-    <button class="btn" onclick="location.href='index.html'">
-      ⬅ 回平台
-    </button>
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <button class="btn secondary" onclick="location.href=PORTAL_URL+'#games'">🎮 回遊戲入口</button>
+      <button class="btn" onclick="location.href=PORTAL_URL+'?v='+Date.now()">⬅ 回 TM 平台</button>
+    </div>
   </div>
 </div>
 
 <div class="wrap">
 
-<h2>🧭 A線怎麼搭（入門版）</h2>
-
-<div class="card">
-  <div class="pill">三步驟上手</div>
-  <div class="muted">
-    1) 在金城車站或沿線站牌上車<br/>
-    2) 上車後開「即時解謎」邊搭邊玩<br/>
-    3) 到站下車玩集章、等待玩射擊
+  <!-- Hero -->
+  <div class="card">
+    <div class="row">
+      <div>
+        <div class="pill">🧭 A線怎麼搭</div>
+        <h1>台灣好行金門縣 A線｜官方導覽（先行版）</h1>
+        <div class="sub">
+          本頁提供 A線 的入門搭乘方式、建議順序與「三遊戲」玩法對應。你可以先用本頁快速上手，再回到 TM 平台開始闖關。
+        </div>
+      </div>
+      <div class="row" style="justify-content:flex-start">
+        <button class="btn pri" onclick="window.open(GAME_LINKS.riddle+'?v='+Date.now(),'_blank','noopener,noreferrer')">🧩 立即開始即時解謎</button>
+        <button class="btn secondary" onclick="document.getElementById('plan').scrollIntoView({behavior:'smooth'})">看推薦行程</button>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="grid2">
+      <div class="notice">
+        <div class="pill">✅ 建議玩法（推搭乘）</div>
+        <div class="tiny" style="margin-top:8px">
+          <span class="k">主線：</span>車上玩「即時解謎」→ 到站解鎖下一關（最能推動搭乘）<br/>
+          <span class="k">支線：</span>下車玩「集章」→ 完成徽章（未來可兌換/抽獎）<br/>
+          <span class="k">補趣：</span>等待空檔玩「射擊」→ 真實景點照片背景
+        </div>
+      </div>
+      <div class="notice">
+        <div class="pill">📌 後續可擴充（已預留）</div>
+        <div class="tiny" style="margin-top:8px">
+          本頁之後可加入：A線路線圖、班次/票券入口、站牌 GPS 解鎖、合作店家兌換、常見問答、活動公告。
+        </div>
+      </div>
+    </div>
   </div>
-</div>
 
-<div class="card">
-<h3>推薦順序（搭配遊戲）</h3>
+  <!-- Quick actions -->
+  <div class="card" id="quick">
+    <div class="row">
+      <h2>快速入口</h2>
+      <div class="pill">先玩主線最有效</div>
+    </div>
+    <div class="grid3" style="margin-top:12px">
+      <div class="step">
+        <div class="pill">🧩 即時解謎</div>
+        <div class="sub">到站才解鎖下一關（車上也能玩）</div>
+        <div style="margin-top:10px">
+          <button class="btn pri" onclick="window.open(GAME_LINKS.riddle+'?v='+Date.now(),'_blank','noopener,noreferrer')">開始解謎</button>
+        </div>
+      </div>
+      <div class="step">
+        <div class="pill">🧾 集章任務</div>
+        <div class="sub">下車探索、累積徽章（兌換版位已預留）</div>
+        <div style="margin-top:10px">
+          <button class="btn" onclick="window.open(GAME_LINKS.stamp+'?v='+Date.now(),'_blank','noopener,noreferrer')">開始集章</button>
+        </div>
+      </div>
+      <div class="step">
+        <div class="pill">🎯 景點射擊</div>
+        <div class="sub">真實景點照片背景，等待也不無聊</div>
+        <div style="margin-top:10px">
+          <button class="btn" onclick="window.open(GAME_LINKS.shoot+'?v='+Date.now(),'_blank','noopener,noreferrer')">開始射擊</button>
+        </div>
+      </div>
+    </div>
+  </div>
 
-<div class="stop">
-<b>金城車站</b><br/>
-<span class="muted">起點｜建議先開「即時解謎」</span>
-</div>
+  <!-- How to ride -->
+  <div class="card" id="ride">
+    <div class="row">
+      <h2>怎麼搭（入門 3 步驟）</h2>
+      <div class="pill">官方導覽語氣版</div>
+    </div>
+    <div class="grid3" style="margin-top:12px">
+      <div class="step">
+        <div class="pill">① 上車</div>
+        <div class="sub">在 A線 起點或沿線站牌上車，建議先準備手機電量與網路。</div>
+      </div>
+      <div class="step">
+        <div class="pill">② 車上闖關</div>
+        <div class="sub">開啟「即時解謎」，依站點解鎖任務。越搭越能玩。</div>
+      </div>
+      <div class="step">
+        <div class="pill">③ 下車探索</div>
+        <div class="sub">到站下車玩「集章」，空檔玩「射擊」，完成徽章更好分享。</div>
+      </div>
+    </div>
+    <div class="hr"></div>
+    <div class="notice">
+      <div class="tiny">
+        ✅ 小提醒：若你在 LINE/IG 內建瀏覽器開啟遊戲，定位/快取可能不穩，建議「在 Chrome/Safari 開啟」。
+      </div>
+    </div>
+  </div>
 
-<div class="stop">
-<b>莒光樓</b><br/>
-<span class="muted">地標｜適合拍照＋解謎</span>
-</div>
+  <!-- Plan -->
+  <div class="card" id="plan">
+    <div class="row">
+      <h2>推薦行程（A線 × 三遊戲）</h2>
+      <div class="pill">可逐步替換成正式站點清單</div>
+    </div>
+    <div class="sub">
+      下方以「示範站點」呈現官方導覽式敘述；你可隨時更新為 A線完整站序、加入停留時間、加上地圖。
+    </div>
 
-<div class="stop">
-<b>水頭聚落</b><br/>
-<span class="muted">洋樓群｜下車玩集章</span>
-</div>
+    <div class="grid2" style="margin-top:12px">
+      <div class="stop">
+        <b>① 起點：金城車站（或主要乘車點）</b>
+        <div class="sub">建議先開 <span class="k">即時解謎</span>，把搭乘變成任務。</div>
+        <div class="tags">
+          <span class="tag">🧩 解謎開場</span>
+          <span class="tag">📍 集合點</span>
+        </div>
+      </div>
 
-<div class="stop">
-<b>明遺老街</b><br/>
-<span class="muted">步行探索｜任務點</span>
-</div>
+      <div class="stop">
+        <b>② 地標：莒光樓</b>
+        <div class="sub">適合拍照分享，並完成一關 <span class="k">解謎</span>。</div>
+        <div class="tags">
+          <span class="tag">📷 打卡</span>
+          <span class="tag">🧩 站點任務</span>
+        </div>
+      </div>
 
-<div class="stop">
-<b>翟山坑道</b><br/>
-<span class="muted">沉浸景點｜完成解謎關鍵</span>
-</div>
+      <div class="stop">
+        <b>③ 聚落：水頭聚落</b>
+        <div class="sub">下車走讀，啟動 <span class="k">集章</span> 任務。</div>
+        <div class="tags">
+          <span class="tag">🧾 集章點</span>
+          <span class="tag">🚶 步行探索</span>
+        </div>
+      </div>
 
-</div>
+      <div class="stop">
+        <b>④ 沉浸：翟山坑道</b>
+        <div class="sub">完成關鍵任務；等待時可玩 <span class="k">射擊</span>。</div>
+        <div class="tags">
+          <span class="tag">🎯 休息空檔</span>
+          <span class="tag">🧩 主線關卡</span>
+        </div>
+      </div>
+    </div>
 
-<div class="card">
-<h3>三款遊戲怎麼配</h3>
+    <div class="hr"></div>
+    <div class="notice">
+      <div class="pill">📌 後續要變「更官方」你可以加這些</div>
+      <div class="tiny" style="margin-top:8px">
+        - A線完整站序（站牌名稱/站碼）<br/>
+        - 路線圖（圖片或互動地圖）<br/>
+        - 建議停留時間（例如 15/30/60 分鐘）<br/>
+        - 票券/班次資訊（連結或內嵌）<br/>
+        - QR 掃碼點（站牌/合作店家）
+      </div>
+    </div>
+  </div>
 
-<div class="muted">
-🧩 即時解謎：在車上玩 → 到站解鎖<br/>
-🧾 集章：下車探索 → 累積徽章<br/>
-🎯 射擊：等車空檔 → 趣味互動
-</div>
-</div>
-
-<div class="card">
-<div class="muted">
-※ 之後可在這頁加入：<br/>
-- 正式時刻表連結<br/>
-- 站牌地圖<br/>
-- 票價與購票<br/>
-- 合作店家兌換
-</div>
-</div>
+  <!-- FAQ placeholder -->
+  <div class="card" id="faq">
+    <div class="row">
+      <h2>常見問題（預留）</h2>
+      <div class="pill">之後可逐步補</div>
+    </div>
+    <div class="notice">
+      <div class="tiny">
+        Q1：不開定位可以玩嗎？（可用手動選站 demo）<br/>
+        Q2：如何避免看到舊版本？（網址加 ?v=數字）<br/>
+        Q3：完成徽章可以做什麼？（未來兌換/抽獎）
+      </div>
+    </div>
+  </div>
 
 </div>
 </body>
 </html>
+
