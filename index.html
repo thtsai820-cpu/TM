@@ -150,28 +150,35 @@
   };
 
   const games = [
-    {
-      key: "riddle",
-      icon: "🧩",
-      title: "即時路線解謎（A線）",
-      desc: "到站才解鎖下一關。最能推動「真的去搭車」。",
-      tags: ["到站解鎖", "車上也能玩", "A線主推"]
-    },
-    {
-      key: "stamp",
-      icon: "🧾",
-      title: "A線集章任務",
-      desc: "下車探索、完成徽章。未來可串合作店家兌換。",
-      tags: ["導流下車", "徽章", "兌換版位已預留"]
-    },
-    {
-      key: "shoot",
-      icon: "🎯",
-      title: "景點射擊小遊戲",
-      desc: "以真實景點照片為背景，等待也不無聊。",
-      tags: ["真實照片背景", "手機觸控", "趣味停留"]
-    }
-  ];
+  {
+    key: "riddle",
+    icon: "🧩",
+    short: "即時解謎",
+    cover: "assets/img/cover-riddle.jpg",
+    title: "即時路線解謎（A線）",
+    desc: "到站才解鎖下一關。最能推動「真的去搭車」。",
+    tags: ["到站解鎖", "車上也能玩", "A線主推"]
+  },
+  {
+    key: "stamp",
+    icon: "🧾",
+    short: "集章任務",
+    cover: "assets/img/cover-stamp.jpg",
+    title: "A線集章任務",
+    desc: "下車探索、完成徽章。未來可串合作店家兌換。",
+    tags: ["導流下車", "徽章", "兌換版位已預留"]
+  },
+  {
+    key: "shoot",
+    icon: "🎯",
+    short: "景點射擊",
+    cover: "assets/img/cover-shoot.jpg",
+    title: "景點射擊小遊戲",
+    desc: "以真實景點照片為背景，等待也不無聊。",
+    tags: ["真實照片背景", "手機觸控", "趣味停留"]
+  }
+];
+
 
   function el(html){
     const t = document.createElement("template");
@@ -184,7 +191,12 @@
     const link = GAME_LINKS[g.key];
     const card = el(`
       <a class="game" href="${link}" target="_blank" rel="noopener noreferrer" aria-label="${g.title}">
-        <div class="cover"><span>${g.icon} 封面圖佔位</span></div>
+        <div class="cover" style="background-image:url('${g.cover}');background-size:cover;background-position:center;">
+  <span style="background:rgba(0,0,0,.45);padding:6px 10px;border-radius:999px;">
+    ${g.icon} ${g.short}
+  </span>
+</div>
+
         <div class="body">
           <div class="pill">${g.icon} ${g.title}</div>
           <div class="sub">${g.desc}</div>
