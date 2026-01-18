@@ -40,6 +40,69 @@
   </style>
 </head>
 <body>
+<!-- ===== 回入口平台導覽模組 ===== -->
+<script>
+const PORTAL_URL = "https://thtsai820-cpu.github.io/TM/";
+</script>
+
+<div style="
+  background:#141622;
+  border-bottom:1px solid rgba(255,255,255,.12);
+  padding:10px 12px;
+  font-family:system-ui,-apple-system,'Noto Sans TC',Segoe UI,Roboto,Arial;
+">
+  <div style="max-width:900px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between">
+
+    <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+      <span style="
+        border:1px solid rgba(255,255,255,.18);
+        border-radius:999px;
+        padding:4px 8px;
+        font-size:12px;
+        color:rgba(255,255,255,.9);
+      ">🚌 A線主題</span>
+
+      <span style="font-size:13px;color:rgba(255,255,255,.86)">
+        玩遊戲搭好行｜金門樂遊一票到底
+      </span>
+    </div>
+
+    <div style="display:flex;gap:8px;align-items:center">
+      <button onclick="location.href=PORTAL_URL+'?v='+Date.now()"
+        style="
+          border:1px solid rgba(255,255,255,.18);
+          background:#1d2140;
+          color:#fff;
+          border-radius:12px;
+          padding:8px 10px;
+          font-weight:900;
+          cursor:pointer;
+        ">
+        ⬅ 回三合一平台
+      </button>
+
+      <button onclick="location.href=PORTAL_URL+'#games'"
+        style="
+          border:1px solid rgba(255,255,255,.18);
+          background:transparent;
+          color:#fff;
+          border-radius:12px;
+          padding:8px 10px;
+          cursor:pointer;
+        ">
+        切換其他遊戲
+      </button>
+    </div>
+
+  </div>
+</div>
+<!-- ===== 模組結束 ===== -->
+
+  <div class="wrap">
+
+
+
+  
   <div class="wrap">
     <!-- Hero -->
     <div class="card">
