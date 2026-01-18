@@ -1,0 +1,208 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>玩遊戲搭好行 金門樂遊一票到底</title>
+  <meta name="theme-color" content="#0b0c10" />
+  <style>
+    :root{
+      font-family: system-ui, -apple-system, "Noto Sans TC", Segoe UI, Roboto, Arial;
+      --bg:#0b0c10; --card:#141622; --line:rgba(255,255,255,.10);
+      --muted:rgba(255,255,255,.78); --soft:rgba(255,255,255,.06);
+      --pri:#7aa2ff;
+    }
+    body{margin:0;background:var(--bg);color:#fff}
+    a{color:inherit;text-decoration:none}
+    .wrap{max-width:980px;margin:0 auto;padding:20px}
+    .card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:16px;margin:14px 0;box-shadow:0 10px 28px rgba(0,0,0,.28)}
+    .row{display:flex;gap:12px;flex-wrap:wrap;align-items:center;justify-content:space-between}
+    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);padding:6px 10px;border-radius:999px;background:rgba(255,255,255,.03);font-size:12px;opacity:.95}
+    h1{font-size:26px;margin:8px 0 0}
+    h2{font-size:16px;margin:0}
+    .sub{color:var(--muted);font-size:13px;line-height:1.7;margin-top:8px}
+    .tiny{color:var(--muted);font-size:12px;line-height:1.6}
+    .btn{appearance:none;border:1px solid var(--line);background:#1d2140;color:#fff;border-radius:14px;padding:10px 12px;font-weight:900;cursor:pointer}
+    .btn.secondary{background:transparent}
+    .btn.pri{background:var(--pri);color:#0b0c10;border-color:rgba(0,0,0,.15)}
+    .grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+    .grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .game{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:rgba(255,255,255,.03)}
+    .cover{height:140px;background:linear-gradient(135deg, rgba(122,162,255,.35), rgba(255,255,255,.05));display:flex;align-items:center;justify-content:center}
+    .cover span{font-weight:900;opacity:.9}
+    .game .body{padding:12px}
+    .tags{margin-top:8px}
+    .tag{display:inline-block;margin-right:6px;margin-top:6px;border:1px solid var(--line);padding:4px 8px;border-radius:999px;font-size:12px;opacity:.9}
+    .hr{height:1px;background:rgba(255,255,255,.08);margin:12px 0}
+    .notice{background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.18);border-radius:14px;padding:12px}
+    .footer{opacity:.75;font-size:12px;line-height:1.6;margin:18px 0 8px}
+    @media (max-width:860px){.grid3{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <!-- Hero -->
+    <div class="card">
+      <div class="row">
+        <div>
+          <div class="pill">🚌 台灣好行金門縣｜A線主題</div>
+          <h1>玩遊戲搭好行 金門樂遊一票到底</h1>
+          <div class="sub">
+            把「搭車」變成任務：在車上解謎、到站集章、等待也能玩。先從 <b>A線</b> 開始，一票玩到底。
+          </div>
+        </div>
+        <div class="row" style="justify-content:flex-start">
+          <button class="btn pri" id="startBtn">立即開始（推薦：即時解謎）</button>
+          <button class="btn secondary" id="howBtn">怎麼玩</button>
+        </div>
+      </div>
+      <div class="hr"></div>
+      <div class="grid2">
+        <div class="notice">
+          <div class="pill">📍 A線玩法建議</div>
+          <div class="tiny" style="margin-top:8px">
+            1）先玩「即時路線解謎」：到站才解鎖 → 直接帶動搭乘<br/>
+            2）下車後玩「集章」：完成徽章 → 之後可串合作店家兌換（版位已預留）<br/>
+            3）空檔玩「景點射擊」：用真實景點照片當背景，等待也不無聊
+          </div>
+        </div>
+        <div class="notice">
+          <div class="pill">📲 之後將導入 APP</div>
+          <div class="tiny" style="margin-top:8px">
+            本網站是先行版行銷入口。未來會把同樣的「三遊戲入口」搬進 APP 內，並加入更多路線資訊與新內容。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Games -->
+    <div class="card" id="games">
+      <div class="row">
+        <h2>三款遊戲（A線先行）</h2>
+        <div class="pill">封面圖：暫用佔位（你提供後可替換）</div>
+      </div>
+      <div class="sub">點卡片即可開啟遊戲（新分頁）。</div>
+
+      <div class="grid3" style="margin-top:12px" id="gameGrid"></div>
+    </div>
+
+    <!-- How to play -->
+    <div class="card" id="how">
+      <h2>怎麼玩（3 步驟）</h2>
+      <div class="sub">
+        ① 選一款遊戲 → ② 到站解鎖/輸入站碼（或先用 demo）→ ③ 完成任務拿徽章，分享給朋友一起搭好行。
+      </div>
+      <div class="hr"></div>
+      <div class="grid2">
+        <div class="notice">
+          <div class="pill">🧩 即時解謎（主推）</div>
+          <div class="tiny" style="margin-top:8px">
+            在車上也能玩：到站才解鎖下一關。最能把「搭乘」直接變成遊戲進度。
+          </div>
+        </div>
+        <div class="notice">
+          <div class="pill">🧾 集章 & 🎯 射擊（輔推）</div>
+          <div class="tiny" style="margin-top:8px">
+            集章負責下車導流；射擊負責填補空檔與趣味停留。三者合體，完整覆蓋「上車→車上→下車」。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Partner placeholder -->
+    <div class="card" id="partners">
+      <div class="row">
+        <h2>合作店家（預留版位）</h2>
+        <div class="pill">你之後提供清單即可上架</div>
+      </div>
+      <div class="notice">
+        <div class="tiny">
+          這裡未來可放：店家名稱｜兌換內容｜地圖連結｜可兌換徽章｜注意事項。<br/>
+          （目前先留空，不影響上線）
+        </div>
+      </div>
+    </div>
+
+    <!-- Future content placeholder -->
+    <div class="card" id="updates">
+      <div class="row">
+        <h2>最新消息 / 路線資訊（預留版位）</h2>
+        <div class="pill">之後可逐步新增內容</div>
+      </div>
+      <div class="notice">
+        <div class="tiny">
+          建議未來新增的區塊：A線路線地圖、班次/票券入口、活動公告、QR 下載點、常見問答、媒體報導、使用者回饋。
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      ※ 本頁為先行版行銷入口網站。若你要我下一步「把三遊戲做成同一個網站的 /games/... 結構（不跳 repo）」我也可以直接幫你改成多頁架構。
+    </div>
+  </div>
+
+<script>
+  // 你只要改這裡三個連結，就能對應到你 GitHub Pages 的三個遊戲
+  const GAME_LINKS = {
+    stamp:  "https://thtsai820-cpu.github.io/Tour/",       // 集章
+    shoot:  "https://thtsai820-cpu.github.io/car-race/",   // 射擊
+    riddle: "https://thtsai820-cpu.github.io/mystery/"     // 即時解謎
+  };
+
+  const games = [
+    {
+      key: "riddle",
+      icon: "🧩",
+      title: "即時路線解謎（A線）",
+      desc: "到站才解鎖下一關。最能推動「真的去搭車」。",
+      tags: ["到站解鎖", "車上也能玩", "A線主推"]
+    },
+    {
+      key: "stamp",
+      icon: "🧾",
+      title: "A線集章任務",
+      desc: "下車探索、完成徽章。未來可串合作店家兌換。",
+      tags: ["導流下車", "徽章", "兌換版位已預留"]
+    },
+    {
+      key: "shoot",
+      icon: "🎯",
+      title: "景點射擊小遊戲",
+      desc: "以真實景點照片為背景，等待也不無聊。",
+      tags: ["真實照片背景", "手機觸控", "趣味停留"]
+    }
+  ];
+
+  function el(html){
+    const t = document.createElement("template");
+    t.innerHTML = html.trim();
+    return t.content.firstChild;
+  }
+
+  const grid = document.getElementById("gameGrid");
+  games.forEach(g=>{
+    const link = GAME_LINKS[g.key];
+    const card = el(`
+      <a class="game" href="${link}" target="_blank" rel="noopener noreferrer" aria-label="${g.title}">
+        <div class="cover"><span>${g.icon} 封面圖佔位</span></div>
+        <div class="body">
+          <div class="pill">${g.icon} ${g.title}</div>
+          <div class="sub">${g.desc}</div>
+          <div class="tags">${g.tags.map(x=>`<span class="tag">${x}</span>`).join("")}</div>
+          <div class="hr"></div>
+          <div class="tiny muted">開啟連結：${link}</div>
+        </div>
+      </a>
+    `);
+    grid.appendChild(card);
+  });
+
+  document.getElementById("startBtn").onclick = ()=>{
+    window.open(GAME_LINKS.riddle + "?v=" + Date.now(), "_blank", "noopener,noreferrer");
+  };
+  document.getElementById("howBtn").onclick = ()=>{
+    document.getElementById("how").scrollIntoView({behavior:"smooth", block:"start"});
+  };
+</script>
+</body>
+</html>
