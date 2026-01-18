@@ -55,6 +55,21 @@ const PORTAL_URL = "https://thtsai820-cpu.github.io/TM/";
   <div style="max-width:900px;margin:0 auto;display:flex;flex-wrap:wrap;gap:8px;align-items:center;justify-content:space-between">
 
     <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+
+    <button onclick="location.href=PORTAL_URL+'leaderboard.html'"
+  style="
+    border:1px solid rgba(255,255,255,.18);
+    background:#1f3d2c;
+    color:#fff;
+    border-radius:12px;
+    padding:8px 10px;
+    font-weight:900;
+    cursor:pointer;
+  ">
+  🏆 排行榜
+</button>
+
+      
       <span style="
         border:1px solid rgba(255,255,255,.18);
         border-radius:999px;
@@ -211,6 +226,44 @@ const PORTAL_URL = "https://thtsai820-cpu.github.io/TM/";
       </div>
     </div>
 
+    <!-- ===== 排行榜入口 ===== -->
+<div class="card">
+  <div class="row">
+    <div>
+      <div class="pill">🏆 玩家成績</div>
+      <h2>即時排行榜</h2>
+
+      <div class="sub">
+        查看「即時解謎、集章任務、景點射擊」的玩家成績，  
+        依分數與完成時間自動排名。
+      </div>
+
+      <div class="tags">
+        <span class="tag">A線主題</span>
+        <span class="tag">即時解謎</span>
+        <span class="tag">到站解鎖</span>
+        <span class="tag">店家兌換</span>
+      </div>
+    </div>
+
+    <button class="btn pri"
+      onclick="location.href='leaderboard.html'">
+      進入排行榜
+    </button>
+  </div>
+
+  <div class="hr"></div>
+
+  <div class="tiny">
+    💡 小提醒：排行榜資料由各遊戲自動送出，  
+    可作為「到店兌獎、抽獎資格、活動排名」使用。
+  </div>
+</div>
+<!-- ===== 排行榜入口結束 ===== -->
+
+
+
+    
     <!-- Games -->
     <div class="card" id="games">
       <div class="row">
