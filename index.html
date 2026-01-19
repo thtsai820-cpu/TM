@@ -247,6 +247,135 @@
 </div>
 <!-- ===== 影音結束 ===== -->
 
+<!-- ===== 低碳教育影片：看影片解鎖徽章 ===== -->
+<div class="card" id="eco-video">
+  <div class="row">
+    <div>
+      <div class="pill">🌱 低碳小學堂</div>
+      <h2>看影片，解鎖「低碳旅人」徽章</h2>
+      <div class="sub">
+        觀看這段短影片（NotebookLM 產出），完成後可解鎖徽章。
+        徽章會顯示在你的平台上，之後也能讓三個遊戲讀到（做成跨遊戲成就）。
+      </div>
+      <div class="tags">
+        <span class="tag">大眾運輸</span>
+        <span class="tag">低碳旅遊</span>
+        <span class="tag">教育任務</span>
+      </div>
+    </div>
+
+    <div class="row" style="justify-content:flex-start">
+      <span class="pill" id="ecoBadgePill">🔒 尚未解鎖</span>
+      <button class="btn secondary" id="ecoResetBtn" type="button">重置徽章</button>
+    </div>
+  </div>
+
+  <div class="hr"></div>
+
+  <div class="notice">
+    <div class="tiny">
+      ✅ 解鎖條件：影片播放達 <b>90%</b>（或播完）。<br/>
+      📌 小提醒：手機上建議點一下播放；若沒有聲音可開啟音量或取消靜音。
+    </div>
+  </div>
+
+  <div style="margin-top:12px">
+    <video
+      id="ecoVideo"
+      controls
+      playsinline
+      preload="metadata"
+      style="width:100%;border-radius:16px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.03)"
+    >
+      <source src="assets/media/pod1.mp4" type="video/mp4" />
+      你的瀏覽器不支援影片播放。
+    </video>
+  </div>
+
+  <div class="tiny muted" style="margin-top:10px" id="ecoHint">
+    影片載入中…（若無法播放，請確認檔案路徑是否為 <b>TM/assets/media/pod1.mp4</b>）
+  </div>
+</div>
+<!-- ===== 低碳教育影片結束 ===== -->
+
+<script>
+/* ========= 影片解鎖徽章（TM） ========= */
+(function(){
+  var BADGE_KEY = "TM_BADGE_LOW_CARBON_V1";
+  var video = document.getElementById("ecoVideo");
+  var pill = document.getElementById("ecoBadgePill");
+  var hint = document.getElementById("ecoHint");
+  var resetBtn = document.getElementById("ecoResetBtn");
+
+  function setUnlocked(){
+    try{ localStorage.setItem(BADGE_KEY, "1"); }catch(e){}
+    if(pill){
+      pill.textContent = "✅ 已解鎖：低碳旅人";
+      pill.style.borderColor = "rgba(122,162,255,.55)";
+      pill.style.background = "rgba(122,162,255,.12)";
+    }
+    if(hint){
+      hint.innerHTML = "🎉 恭喜！你已解鎖 <b>低碳旅人</b> 徽章。接下來去玩三個遊戲，讓『搭好行』更有成就感。";
+    }
+  }
+
+  function setLocked(){
+    if(pill){
+      pill.textContent = "🔒 尚未解鎖";
+      pill.style.borderColor = "";
+      pill.style.background = "";
+    }
+    if(hint){
+      hint.textContent = "請播放影片至 90%（或播完）即可解鎖徽章。";
+    }
+  }
+
+  function isUnlocked(){
+    try{ return localStorage.getItem(BADGE_KEY) === "1"; }catch(e){ return false; }
+  }
+
+  // 初始化徽章狀態
+  if(isUnlocked()) setUnlocked();
+  else setLocked();
+
+  if(resetBtn){
+    resetBtn.onclick = function(){
+      try{ localStorage.removeItem(BADGE_KEY); }catch(e){}
+      setLocked();
+      if(video){
+        try{ video.currentTime = 0; }catch(e){}
+      }
+      alert("已重置徽章。重新看影片即可再解鎖。");
+    };
+  }
+
+  if(!video) return;
+
+  video.addEventListener("loadedmetadata", function(){
+    if(hint) hint.textContent = "影片已載入。播放達 90%（或播完）即可解鎖徽章。";
+  });
+
+  function checkProgress(){
+    if(isUnlocked()) return;
+    if(!video.duration || !isFinite(video.duration)) return;
+
+    var ratio = video.currentTime / video.duration;
+    if(ratio >= 0.90){
+      setUnlocked();
+    }else{
+      if(hint){
+        hint.textContent = "觀看進度：" + Math.round(ratio * 100) + "%（達 90% 解鎖）";
+      }
+    }
+  }
+
+  video.addEventListener("timeupdate", checkProgress);
+  video.addEventListener("ended", function(){
+    if(!isUnlocked()) setUnlocked();
+  });
+})();
+</script>
+
   
 
   <!-- Games -->
