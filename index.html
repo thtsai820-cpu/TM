@@ -135,7 +135,23 @@
       <div>
         <div class="pill">🚌 台灣好行金門縣｜A線主題</div>
         <h1>遊戲搭好行 金門樂遊玩到底</h1>
-        <div class="sub">
+
+         <!-- Hero 徽章顯示區 -->
+         <div id="heroBadgeArea" style="margin-top:8px;display:none">
+         <span class="pill" style="
+         border-color:rgba(122,162,255,.55);
+         background:rgba(122,162,255,.12);
+         ">
+        🏅 低碳旅人｜已完成教育任務
+         </span>
+
+         <span class="tiny muted" style="margin-left:6px">
+         你已透過影片了解大眾運輸的減碳意義
+         </span>
+         </div>
+         <!-- Hero 徽章結束 -->
+
+         <div class="sub">
          <b>玩得開心，也替金門減碳。</b><br/>
          搭台灣好行 A線完成任務、拿徽章、上排行榜。<br/>
          <b>一票到底，邊玩邊省碳。</b>
@@ -472,8 +488,34 @@
 
   document.getElementById("howBtn").onclick = ()=>{
     document.getElementById("how").scrollIntoView({behavior:"smooth", block:"start"});
-  };
+  };  
 </script>
 
+  <script>
+(function(){
+  var BADGE_KEY = "TM_BADGE_LOW_CARBON_V1";
+
+  function checkHeroBadge(){
+    var area = document.getElementById("heroBadgeArea");
+    if(!area) return;
+
+    var unlocked = false;
+    try{
+      unlocked = localStorage.getItem(BADGE_KEY) === "1";
+    }catch(e){}
+
+    area.style.display = unlocked ? "block" : "none";
+  }
+
+  // 進頁就檢查
+  checkHeroBadge();
+
+  // 若有人剛在本頁看完影片解鎖，也即時更新
+  window.addEventListener("storage", checkHeroBadge);
+})();
+</script>
+
+
+  
 </body>
 </html>
