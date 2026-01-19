@@ -130,14 +130,16 @@
 
 <div class="wrap">
   <!-- Hero -->
-  <div class="card">
+  <div class="card" style="position:relative">
+
     <div class="row">
       <div>
         <div class="pill">🚌 台灣好行金門縣｜A線主題</div>
         <h1>遊戲搭好行 金門樂遊玩到底</h1>
 
          <!-- Hero 徽章顯示區 -->
-         <div id="heroBadgeArea" style="margin-top:8px;display:none">
+         <div id="heroBadgeFloat" style="display:none"></div>
+ 
          <span class="pill" style="
          border-color:rgba(122,162,255,.55);
          background:rgba(122,162,255,.12);
@@ -491,6 +493,54 @@
   };  
 </script>
 
+<script>
+(function(){
+  var BADGE_KEY = "TM_BADGE_LOW_CARBON_V1";
+
+  function renderHeroBadge(){
+    var box = document.getElementById("heroBadgeFloat");
+    if(!box) return;
+
+    var unlocked = false;
+    try{ unlocked = localStorage.getItem(BADGE_KEY) === "1"; }catch(e){}
+
+    if(!unlocked){
+      box.style.display = "none";
+      box.innerHTML = "";
+      return;
+    }
+
+    box.style.display = "block";
+    box.innerHTML = `
+      <div style="
+        position:absolute; right:14px; top:14px;
+        display:flex; align-items:center; gap:10px;
+        padding:10px 12px;
+        border-radius:14px;
+        border:1px solid rgba(122,162,255,.55);
+        background:rgba(122,162,255,.18);
+        box-shadow:0 12px 26px rgba(0,0,0,.35);
+      ">
+        <div style="
+          width:40px;height:40px;border-radius:12px;
+          display:flex;align-items:center;justify-content:center;
+          background:rgba(0,0,0,.25);
+          font-size:22px;
+        ">🏅</div>
+        <div>
+          <div style="font-weight:1000;letter-spacing:.3px">低碳旅人</div>
+          <div style="font-size:12px;opacity:.88">已完成影片教育任務</div>
+        </div>
+      </div>
+    `;
+  }
+
+  renderHeroBadge();
+  window.addEventListener("storage", renderHeroBadge);
+})();
+</script>
+
+  
   <script>
 (function(){
   var BADGE_KEY = "TM_BADGE_LOW_CARBON_V1";
