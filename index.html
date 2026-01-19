@@ -317,41 +317,151 @@
     </div>
   </div>
 
-  <!-- ===== 輕量版：金門話小角落（縮小置底） ===== -->
+
+<!-- ===== 在地漫畫輪播（minai + kamate） ===== -->
 <div class="card" style="max-width:760px;margin:20px auto;opacity:.96">
   <div class="row">
     <div>
-      <div class="pill">🗣 來聽金門話</div>
-
+      <div class="pill">🗣 來聽金門話｜漫畫輪播</div>
       <div class="sub">
-        <b>蜜奶（mi-nai）＝什麼事？要做什麼？</b><br/>
-        金門話與本島台語不完全一樣，  
-        旅行路上聽得懂一點，更有在地感。
+        <b>蜜奶（mi-nai）＝什麼事？要做什麼？</b>
+        <span class="tiny muted">（左右滑 / 點箭頭）</span>
       </div>
+    </div>
+
+    <div class="row" style="justify-content:flex-start">
+      <button class="btn secondary" type="button" id="kbPrev">◀</button>
+      <button class="btn secondary" type="button" id="kbNext">▶</button>
+      <button class="btn secondary" type="button" id="kbAuto">⏯ 自動</button>
     </div>
   </div>
 
   <div class="hr"></div>
 
-  <div style="text-align:center">
-    <img 
-      src="assets/img/minai.jpg" 
-      alt="金門話 蜜奶 教學"
-      style="
-        width:100%;
-        max-width:360px;
-        border-radius:12px;
-        border:1px solid rgba(255,255,255,.12);
-        opacity:.96;
-      "
-    />
-  </div>
+  <div style="position:relative">
+    <div id="kbTrack" style="
+      display:flex;
+      gap:12px;
+      overflow:hidden;
+      scroll-behavior:smooth;
+      border-radius:14px;
+    ">
 
-  <div class="tiny muted" style="margin-top:8px;text-align:center">
-    💡 之後可做：每一站一個金門話小教室
+      <!-- 第1張：minai -->
+      <div class="kbSlide" style="min-width:100%">
+        <img src="assets/img/minai.jpg" alt="金門話 蜜奶 漫畫"
+          style="width:100%;max-width:520px;display:block;margin:0 auto;
+                 border-radius:12px;border:1px solid rgba(255,255,255,.12);" />
+      </div>
+
+      <!-- 第2張：kamate -->
+      <div class="kbSlide" style="min-width:100%">
+        <img src="assets/img/kamate.jpg" alt="金門話 kamate 漫畫"
+          style="width:100%;max-width:520px;display:block;margin:0 auto;
+                 border-radius:12px;border:1px solid rgba(255,255,255,.12);" />
+      </div>
+
+    </div>
+
+    <!-- 圓點指示器 -->
+    <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
+      <span class="kbDot" data-i="0"
+        style="width:10px;height:10px;border-radius:999px;
+               border:1px solid rgba(255,255,255,.25);
+               background:rgba(122,162,255,.8);cursor:pointer"></span>
+
+      <span class="kbDot" data-i="1"
+        style="width:10px;height:10px;border-radius:999px;
+               border:1px solid rgba(255,255,255,.25);
+               background:rgba(255,255,255,.12);cursor:pointer"></span>
+    </div>
+
+    <div class="tiny muted" style="margin-top:8px;text-align:center">
+      💡 之後可擴充：每一站一張漫畫，變成「每日金門話」！
+    </div>
   </div>
 </div>
-<!-- ===== 金門話小角落結束 ===== -->
+
+<script>
+(function(){
+  var track = document.getElementById("kbTrack");
+  var prev = document.getElementById("kbPrev");
+  var next = document.getElementById("kbNext");
+  var auto = document.getElementById("kbAuto");
+  var dots = document.querySelectorAll(".kbDot");
+
+  if(!track || dots.length===0) return;
+
+  var idx = 0;
+  var timer = null;
+
+  function go(i){
+    idx = Math.max(0, Math.min(dots.length-1, i));
+    track.scrollTo({ left: track.clientWidth * idx, behavior: "smooth" });
+
+    for(var d=0; d<dots.length; d++){
+      dots[d].style.background =
+        (d===idx) ? "rgba(122,162,255,.8)" : "rgba(255,255,255,.12)";
+    }
+  }
+
+  function nextOne(){
+    go(idx + 1 > dots.length-1 ? 0 : idx + 1);
+  }
+
+  function prevOne(){
+    go(idx - 1 < 0 ? dots.length-1 : idx - 1);
+  }
+
+  if(next) next.onclick = nextOne;
+  if(prev) prev.onclick = prevOne;
+
+  for(var k=0;k<dots.length;k++){
+    dots[k].onclick = function(){
+      var i = parseInt(this.getAttribute("data-i"),10);
+      go(i);
+    };
+  }
+
+  // 自動輪播
+  function toggleAuto(){
+    if(timer){
+      clearInterval(timer);
+      timer = null;
+      if(auto) auto.textContent = "⏯ 自動";
+      return;
+    }
+    timer = setInterval(nextOne, 3500);
+    if(auto) auto.textContent = "⏸ 暫停";
+  }
+
+  if(auto) auto.onclick = toggleAuto;
+
+  // 手機滑動
+  var startX = 0;
+  track.addEventListener("touchstart", function(e){
+    startX = e.touches[0].clientX;
+  }, {passive:true});
+
+  track.addEventListener("touchend", function(e){
+    var endX = (e.changedTouches && e.changedTouches[0])
+      ? e.changedTouches[0].clientX : startX;
+
+    var dx = endX - startX;
+    if(Math.abs(dx) > 40){
+      if(dx < 0) nextOne(); else prevOne();
+    }
+  }, {passive:true});
+
+  window.addEventListener("resize", function(){ go(idx); });
+
+  // 初始化
+  go(0);
+})();
+</script>
+<!-- ===== 輪播結束 ===== -->
+
+  
 
   
   <div class="footer">
