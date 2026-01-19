@@ -256,6 +256,77 @@
   </div>
   <!-- ===== 低碳教育影片結束 ===== -->
 
+  <!-- ===== 即時翻譯（Cloudflare Worker）===== -->
+<div class="card" id="translate">
+  <div class="row">
+    <div>
+      <div class="pill">🈶 即時翻譯</div>
+      <h2>金門話 / 中文 → 英文（或日文）</h2>
+      <div class="sub">
+        你輸入一句話（例如「蜜奶？」），按翻譯就會即時顯示結果。<br/>
+        之後也能把它串到「來聽金門話」漫畫，變成互動學習。
+      </div>
+      <div class="tags">
+        <span class="tag">雲端翻譯 API</span>
+        <span class="tag">手機可用</span>
+        <span class="tag">教學加分</span>
+      </div>
+    </div>
+    <div class="row" style="justify-content:flex-start">
+      <span class="pill" id="transStatus">🟡 尚未翻譯</span>
+    </div>
+  </div>
+
+  <div class="hr"></div>
+
+  <div class="trans-box">
+    <div>
+      <div class="tiny">輸入（中文/金門話）</div>
+      <textarea id="transIn" class="trans-area" placeholder="例如：蜜奶？ 我想搭A線去莒光樓～"></textarea>
+
+      <div class="row" style="justify-content:flex-start;margin-top:10px">
+        <select id="transTo">
+          <option value="en">英文</option>
+          <option value="ja">日文</option>
+        </select>
+      </div>
+
+      <div class="row" style="justify-content:flex-start;margin-top:10px">
+        <button class="kbtn" id="transBtn">⚡ 立即翻譯</button>
+        <button class="kbtn secondary" id="transDemoBtn">塞入範例：蜜奶？</button>
+      </div>
+
+      <div class="tiny muted" style="margin-top:10px">
+        若無反應：請確認 Worker 網址已填入程式碼中的 <b>WORKER_URL</b>。
+      </div>
+    </div>
+
+    <div>
+      <div class="tiny">翻譯結果</div>
+      <textarea id="transOut" class="trans-area" placeholder="結果會顯示在這裡" readonly></textarea>
+
+      <div class="row" style="justify-content:flex-start;margin-top:10px">
+        <button class="kbtn secondary" id="copyBtn">📋 複製結果</button>
+      </div>
+
+      <div class="tiny muted" style="margin-top:10px" id="transHint"></div>
+    </div>
+  </div>
+</div>
+<!-- ===== 即時翻譯結束 ===== -->
+
+
+<style>
+  .trans-box{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  .trans-area{width:100%;min-height:120px;resize:vertical}
+  .kbtn{appearance:none;border:1px solid rgba(255,255,255,.12);background:#1d2140;color:#fff;border-radius:14px;padding:10px 12px;font-weight:900;cursor:pointer}
+  .kbtn.secondary{background:transparent}
+  @media (max-width:860px){.trans-box{grid-template-columns:1fr}}
+</style>
+
+
+  
+
   <!-- Games -->
   <div class="card" id="games">
     <div class="row">
@@ -666,7 +737,166 @@
     else setLockedUI();
   });
 })();
+
+<script>
+(function(){
+  // ✅ 換成你的 Worker 網址（很重要）
+  var WORKER_URL = "<script>
+(function(){
+  // ✅ 換成你的 Worker 網址（很重要）
+  var WORKER_URL = "https://quiet-heart-1355.thtsai820.workers.dev/";
+
+  function $(id){ return document.getElementById(id); }
+
+  var inEl = $("transIn");
+  var outEl = $("transOut");
+  var toEl = $("transTo");
+  var btn = $("transBtn");
+  var demoBtn = $("transDemoBtn");
+  var copyBtn = $("copyBtn");
+  var status = $("transStatus");
+  var hint = $("transHint");
+
+  function setStatus(text, ok){
+    if(!status) return;
+    status.textContent = text;
+    status.style.borderColor = ok ? "rgba(122,162,255,.55)" : "rgba(255,255,255,.12)";
+    status.style.background = ok ? "rgba(122,162,255,.12)" : "rgba(255,255,255,.03)";
+  }
+
+  async function translate(){
+    var text = (inEl && inEl.value) ? inEl.value.trim() : "";
+    var to = (toEl && toEl.value) ? toEl.value : "en";
+    if(!text){
+      setStatus("🔴 請先輸入文字", false);
+      return;
+    }
+
+    setStatus("🟡 翻譯中…", false);
+    if(hint) hint.textContent = "";
+
+    try{
+      var resp = await fetch(WORKER_URL + "/translate", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ text:text, to:to })
+      });
+
+      var data = await resp.json();
+      if(!data || data.ok !== true){
+        throw new Error((data && data.error) ? data.error : "翻譯失敗");
+      }
+
+      if(outEl) outEl.value = data.translated || "";
+      setStatus("✅ 翻譯完成", true);
+      if(hint) hint.textContent = "已呼叫 Cloudflare Worker 成功。";
+    }catch(e){
+      setStatus("🔴 翻譯失敗", false);
+      if(hint) hint.textContent = "錯誤：" + (e && e.message ? e.message : e);
+    }
+  }
+
+  if(btn) btn.onclick = translate;
+  if(demoBtn) demoBtn.onclick = function(){
+    if(inEl) inEl.value = "蜜奶？（mi-nai）我想搭A線去莒光樓～";
+    setStatus("🟡 已塞入範例", false);
+  };
+
+  if(copyBtn) copyBtn.onclick = function(){
+    var t = outEl ? outEl.value : "";
+    if(!t) return;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(function(){
+        setStatus("📋 已複製結果", true);
+      });
+    }else{
+      alert(t);
+    }
+  };
+
+  // 初始狀態
+  setStatus("🟡 尚未翻譯", false);
+})();
+</script>
+";
+
+  function $(id){ return document.getElementById(id); }
+
+  var inEl = $("transIn");
+  var outEl = $("transOut");
+  var toEl = $("transTo");
+  var btn = $("transBtn");
+  var demoBtn = $("transDemoBtn");
+  var copyBtn = $("copyBtn");
+  var status = $("transStatus");
+  var hint = $("transHint");
+
+  function setStatus(text, ok){
+    if(!status) return;
+    status.textContent = text;
+    status.style.borderColor = ok ? "rgba(122,162,255,.55)" : "rgba(255,255,255,.12)";
+    status.style.background = ok ? "rgba(122,162,255,.12)" : "rgba(255,255,255,.03)";
+  }
+
+  async function translate(){
+    var text = (inEl && inEl.value) ? inEl.value.trim() : "";
+    var to = (toEl && toEl.value) ? toEl.value : "en";
+    if(!text){
+      setStatus("🔴 請先輸入文字", false);
+      return;
+    }
+
+    setStatus("🟡 翻譯中…", false);
+    if(hint) hint.textContent = "";
+
+    try{
+      var resp = await fetch(WORKER_URL + "/translate", {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ text:text, to:to })
+      });
+
+      var data = await resp.json();
+      if(!data || data.ok !== true){
+        throw new Error((data && data.error) ? data.error : "翻譯失敗");
+      }
+
+      if(outEl) outEl.value = data.translated || "";
+      setStatus("✅ 翻譯完成", true);
+      if(hint) hint.textContent = "已呼叫 Cloudflare Worker 成功。";
+    }catch(e){
+      setStatus("🔴 翻譯失敗", false);
+      if(hint) hint.textContent = "錯誤：" + (e && e.message ? e.message : e);
+    }
+  }
+
+  if(btn) btn.onclick = translate;
+  if(demoBtn) demoBtn.onclick = function(){
+    if(inEl) inEl.value = "蜜奶？（mi-nai）我想搭A線去莒光樓～";
+    setStatus("🟡 已塞入範例", false);
+  };
+
+  if(copyBtn) copyBtn.onclick = function(){
+    var t = outEl ? outEl.value : "";
+    if(!t) return;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(function(){
+        setStatus("📋 已複製結果", true);
+      });
+    }else{
+      alert(t);
+    }
+  };
+
+  // 初始狀態
+  setStatus("🟡 尚未翻譯", false);
+})();
 </script>
 
+
+
+  
+</script>
+ 
 </body>
 </html>
