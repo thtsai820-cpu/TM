@@ -422,23 +422,25 @@
     heroFloat.style.display = "block";
     heroFloat.innerHTML = `
       <div style="
-        position:absolute; right:14px; top:14px;
+        position:absolute; right:12px; top:12px;
         display:flex; align-items:center; gap:10px;
-        padding:10px 12px;
-        border-radius:14px;
+        padding:8px 10px;
+        border-radius:12px;
         border:1px solid rgba(122,162,255,.55);
         background:rgba(122,162,255,.18);
-        box-shadow:0 12px 26px rgba(0,0,0,.35);
+        box-shadow:0 10px 22px rgba(0,0,0,.32);
+        transform-origin: top right;
+        transform: scale(.86);
       ">
         <div style="
-          width:40px;height:40px;border-radius:12px;
+          width:32px;height:32px;border-radius:10px;
           display:flex;align-items:center;justify-content:center;
-          background:rgba(0,0,0,.25);
-          font-size:22px;
+          background:rgba(0,0,0,.22);
+          font-size:18px;
         ">🏅</div>
         <div>
           <div style="font-weight:1000;letter-spacing:.3px">低碳旅人</div>
-          <div style="font-size:12px;opacity:.88">已完成影片教育任務</div>
+          <div style="font-size:12px;opacity:.86">已完成影片教育任務</div>
         </div>
       </div>
     `;
