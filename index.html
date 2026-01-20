@@ -22,7 +22,6 @@
     h2{font-size:16px;margin:0}
     .sub{color:var(--muted);font-size:13px;line-height:1.7;margin-top:8px}
     .tiny{color:var(--muted);font-size:12px;line-height:1.6}
-    .muted{opacity:.78}
     .btn{appearance:none;border:1px solid var(--line);background:#1d2140;color:#fff;border-radius:14px;padding:10px 12px;font-weight:900;cursor:pointer}
     .btn.secondary{background:transparent}
     .btn.pri{background:var(--pri);color:#0b0c10;border-color:rgba(0,0,0,.15)}
@@ -39,38 +38,8 @@
     .notice{background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.18);border-radius:14px;padding:12px}
     .footer{opacity:.75;font-size:12px;line-height:1.6;margin:18px 0 8px}
     @media (max-width:860px){.grid3{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
-
-    /* ===== 翻譯卡片的表單樣式 ===== */
-    .trans-box{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .trans-area{
-      width:100%;
-      min-height:120px;
-      resize:vertical;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.15);
-      background:#0f1120;
-      color:#fff;
-      font-size:14px;
-      line-height:1.6;
-      box-sizing:border-box;
-    }
-    select{
-      width:100%;
-      padding:10px 12px;
-      border-radius:12px;
-      border:1px solid rgba(255,255,255,.15);
-      background:#0f1120;
-      color:#fff;
-      font-size:14px;
-      box-sizing:border-box;
-    }
-    .kbtn{appearance:none;border:1px solid rgba(255,255,255,.12);background:#1d2140;color:#fff;border-radius:14px;padding:10px 12px;font-weight:900;cursor:pointer}
-    .kbtn.secondary{background:transparent}
-    @media (max-width:860px){.trans-box{grid-template-columns:1fr}}
   </style>
 </head>
-
 <body>
 
 <!-- ===== TM 平台導覽列（單一版本，含排行榜） ===== -->
@@ -159,6 +128,7 @@
 <!-- ===== 導覽列結束 ===== -->
 
 <div class="wrap">
+
   <!-- Hero -->
   <div class="card" id="heroCard" style="position:relative;">
     <!-- Hero 成就徽章（浮在右上角；解鎖才顯示） -->
@@ -287,7 +257,7 @@
   </div>
   <!-- ===== 低碳教育影片結束 ===== -->
 
-  <!-- ===== 即時翻譯（Cloudflare Worker / OpenAI 翻譯由 Worker 代理）===== -->
+  <!-- ===== 即時翻譯（Cloudflare Worker + OpenAI）===== -->
   <div class="card" id="translate">
     <div class="row">
       <div>
@@ -295,7 +265,7 @@
         <h2>金門話 / 中文 → 英文（或日文）</h2>
         <div class="sub">
           你輸入一句話（例如「蜜奶？」），按翻譯就會即時顯示結果。<br/>
-          （注意：OpenAI 翻譯會在 Cloudflare Worker 端執行，TM 前端不放 API Key）
+          之後也能把它串到「來聽金門話」漫畫，變成互動學習。
         </div>
         <div class="tags">
           <span class="tag">雲端翻譯 API</span>
@@ -328,7 +298,7 @@
         </div>
 
         <div class="tiny muted" style="margin-top:10px">
-          若無反應：請確認下方程式的 <b>WORKER_URL</b> 已改成你的 Worker 網址。
+          若無反應：請確認 Worker 網址已填入程式碼中的 <b>WORKER_URL</b>。
         </div>
       </div>
 
@@ -346,6 +316,14 @@
   </div>
   <!-- ===== 即時翻譯結束 ===== -->
 
+  <style>
+    .trans-box{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .trans-area{width:100%;min-height:120px;resize:vertical;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:#0f1120;color:#fff;font-size:14px}
+    .kbtn{appearance:none;border:1px solid rgba(255,255,255,.12);background:#1d2140;color:#fff;border-radius:14px;padding:10px 12px;font-weight:900;cursor:pointer}
+    .kbtn.secondary{background:transparent}
+    @media (max-width:860px){.trans-box{grid-template-columns:1fr}}
+  </style>
+
   <!-- Games -->
   <div class="card" id="games">
     <div class="row">
@@ -353,6 +331,7 @@
       <div class="pill">封面圖：先放佔位（你提供後可替換）</div>
     </div>
     <div class="sub">點卡片即可開啟遊戲（新分頁）。</div>
+
     <div class="grid3" style="margin-top:12px" id="gameGrid"></div>
   </div>
 
@@ -434,6 +413,7 @@
         scroll-behavior:smooth;
         border-radius:14px;
       ">
+
         <div class="kbSlide" style="min-width:100%">
           <img src="assets/img/minai.jpg" alt="金門話 蜜奶 漫畫"
             style="width:100%;max-width:380px;display:block;margin:0 auto;
@@ -445,6 +425,7 @@
             style="width:100%;max-width:380px;display:block;margin:0 auto;
                    border-radius:12px;border:1px solid rgba(255,255,255,.12);" />
         </div>
+
       </div>
 
       <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
@@ -469,11 +450,11 @@
   <div class="footer">
     ※ 本頁為先行版行銷入口網站。若你要我下一步「把三遊戲做成同一個網站的 /games/... 結構（不跳 repo）」我也可以直接幫你改成多頁架構。
   </div>
-</div>
 
-<!-- ===================== JS 區塊（全部都在這裡，避免結構壞掉） ===================== -->
+</div><!-- /wrap -->
+
+<!-- ====== 遊戲卡片渲染 ====== -->
 <script>
-  /* ====== 遊戲連結 ====== */
   const GAME_LINKS = {
     stamp:  "https://thtsai820-cpu.github.io/Tour/",
     shoot:  "https://thtsai820-cpu.github.io/car-race/",
@@ -517,302 +498,323 @@
   }
 
   const grid = document.getElementById("gameGrid");
-  games.forEach(g=>{
-    const link = GAME_LINKS[g.key];
-    const card = el(`
-      <a class="game" href="${link}" target="_blank" rel="noopener noreferrer" aria-label="${g.title}">
-        <div class="cover" style="background-image:url('${g.cover}');background-size:cover;background-position:center;">
-          <span style="background:rgba(0,0,0,.45);padding:6px 10px;border-radius:999px;">
-            ${g.icon} ${g.short}
-          </span>
-        </div>
-        <div class="body">
-          <div class="pill">${g.icon} ${g.title}</div>
-          <div class="sub">${g.desc}</div>
-          <div class="tags">${g.tags.map(x=>`<span class="tag">${x}</span>`).join("")}</div>
-          <div class="hr"></div>
-          <div class="tiny">開啟連結：${link}</div>
-        </div>
-      </a>
-    `);
-    grid.appendChild(card);
+  if(grid){
+    games.forEach(g=>{
+      const link = GAME_LINKS[g.key];
+      const card = el(`
+        <a class="game" href="${link}" target="_blank" rel="noopener noreferrer" aria-label="${g.title}">
+          <div class="cover" style="background-image:url('${g.cover}');background-size:cover;background-position:center;">
+            <span style="background:rgba(0,0,0,.45);padding:6px 10px;border-radius:999px;">
+              ${g.icon} ${g.short}
+            </span>
+          </div>
+          <div class="body">
+            <div class="pill">${g.icon} ${g.title}</div>
+            <div class="sub">${g.desc}</div>
+            <div class="tags">${g.tags.map(x=>`<span class="tag">${x}</span>`).join("")}</div>
+            <div class="hr"></div>
+            <div class="tiny">開啟連結：${link}</div>
+          </div>
+        </a>
+      `);
+      grid.appendChild(card);
+    });
+  }
+
+  var startBtn = document.getElementById("startBtn");
+  if(startBtn){
+    startBtn.onclick = function(){
+      window.open(GAME_LINKS.riddle + "?v=" + Date.now(), "_blank", "noopener,noreferrer");
+    };
+  }
+
+  var howBtn = document.getElementById("howBtn");
+  if(howBtn){
+    howBtn.onclick = function(){
+      var how = document.getElementById("how");
+      if(how) how.scrollIntoView({behavior:"smooth", block:"start"});
+    };
+  }
+</script>
+
+<!-- ====== 影片解鎖徽章 + Hero 浮標 ====== -->
+<script>
+(function(){
+  var BADGE_KEY = "TM_BADGE_LOW_CARBON_V1";
+  var video = document.getElementById("ecoVideo");
+  var pill = document.getElementById("ecoBadgePill");
+  var hint = document.getElementById("ecoHint");
+  var resetBtn = document.getElementById("ecoResetBtn");
+  var heroFloat = document.getElementById("heroBadgeFloat");
+
+  function isUnlocked(){
+    try{ return localStorage.getItem(BADGE_KEY) === "1"; }catch(e){ return false; }
+  }
+
+  function renderHeroBadge(){
+    if(!heroFloat) return;
+
+    if(!isUnlocked()){
+      heroFloat.style.display = "none";
+      heroFloat.innerHTML = "";
+      return;
+    }
+
+    heroFloat.style.display = "block";
+    heroFloat.innerHTML = ""
+      + "<div style='"
+      + "position:absolute; right:12px; top:12px;"
+      + "display:flex; align-items:center; gap:8px;"
+      + "padding:6px 8px;"
+      + "border-radius:12px;"
+      + "border:1px solid rgba(122,162,255,.55);"
+      + "background:rgba(122,162,255,.18);"
+      + "box-shadow:0 10px 22px rgba(0,0,0,.32);"
+      + "transform-origin: top right;"
+      + "transform: scale(.82);"
+      + "max-width:220px;"
+      + "'>"
+      + "  <div style='"
+      + "    width:28px;height:28px;border-radius:10px;"
+      + "    display:flex;align-items:center;justify-content:center;"
+      + "    background:rgba(0,0,0,.22);"
+      + "    font-size:16px;"
+      + "  '>🏅</div>"
+      + "  <div style='min-width:0'>"
+      + "    <div style='font-weight:1000;letter-spacing:.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>低碳旅人</div>"
+      + "    <div style='font-size:12px;opacity:.86;white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>已完成影片教育任務</div>"
+      + "  </div>"
+      + "</div>";
+  }
+
+  function setUnlockedUI(){
+    try{ localStorage.setItem(BADGE_KEY, "1"); }catch(e){}
+    if(pill){
+      pill.textContent = "✅ 已解鎖：低碳旅人";
+      pill.style.borderColor = "rgba(122,162,255,.55)";
+      pill.style.background = "rgba(122,162,255,.12)";
+    }
+    if(hint){
+      hint.innerHTML = "🎉 恭喜！你已解鎖 <b>低碳旅人</b> 徽章（會顯示在 Hero 區）。";
+    }
+    renderHeroBadge();
+  }
+
+  function setLockedUI(){
+    if(pill){
+      pill.textContent = "🔒 尚未解鎖";
+      pill.style.borderColor = "";
+      pill.style.background = "";
+    }
+    if(hint){
+      hint.textContent = "請播放影片至 90%（或播完）即可解鎖徽章。";
+    }
+    renderHeroBadge();
+  }
+
+  // init
+  if(isUnlocked()) setUnlockedUI();
+  else setLockedUI();
+
+  if(resetBtn){
+    resetBtn.onclick = function(){
+      try{ localStorage.removeItem(BADGE_KEY); }catch(e){}
+      setLockedUI();
+      if(video){
+        try{ video.currentTime = 0; }catch(e){}
+      }
+      alert("已重置徽章。重新看影片即可再解鎖。");
+    };
+  }
+
+  if(!video) return;
+
+  video.addEventListener("loadedmetadata", function(){
+    if(hint) hint.textContent = "影片已載入。播放達 90%（或播完）即可解鎖徽章。";
   });
 
-  document.getElementById("startBtn").onclick = ()=>{
-    window.open(GAME_LINKS.riddle + "?v=" + Date.now(), "_blank", "noopener,noreferrer");
-  };
-  document.getElementById("howBtn").onclick = ()=>{
-    document.getElementById("how").scrollIntoView({behavior:"smooth", block:"start"});
-  };
+  function checkProgress(){
+    if(isUnlocked()) return;
+    if(!video.duration || !isFinite(video.duration)) return;
 
-  /* ========= 影片解鎖徽章 + Hero 浮動徽章（縮小避免壓到按鈕） ========= */
-  (function(){
-    var BADGE_KEY = "TM_BADGE_LOW_CARBON_V1";
-    var video = document.getElementById("ecoVideo");
-    var pill = document.getElementById("ecoBadgePill");
-    var hint = document.getElementById("ecoHint");
-    var resetBtn = document.getElementById("ecoResetBtn");
-    var heroFloat = document.getElementById("heroBadgeFloat");
-
-    function isUnlocked(){
-      try{ return localStorage.getItem(BADGE_KEY) === "1"; }catch(e){ return false; }
-    }
-
-    function renderHeroBadge(){
-      if(!heroFloat) return;
-
-      if(!isUnlocked()){
-        heroFloat.style.display = "none";
-        heroFloat.innerHTML = "";
-        return;
-      }
-
-      heroFloat.style.display = "block";
-      heroFloat.innerHTML = `
-        <div style="
-          position:absolute; right:12px; top:12px;
-          display:flex; align-items:center; gap:8px;
-          padding:6px 8px;
-          border-radius:12px;
-          border:1px solid rgba(122,162,255,.55);
-          background:rgba(122,162,255,.18);
-          box-shadow:0 10px 22px rgba(0,0,0,.32);
-          transform-origin: top right;
-          transform: scale(.78);
-          max-width:210px;
-        ">
-          <div style="
-            width:28px;height:28px;border-radius:10px;
-            display:flex;align-items:center;justify-content:center;
-            background:rgba(0,0,0,.22);
-            font-size:16px;
-            flex:0 0 auto;
-          ">🏅</div>
-          <div style="line-height:1.2">
-            <div style="font-weight:1000;letter-spacing:.4px;font-size:13px">低碳旅人</div>
-            <div style="font-size:11px;opacity:.86">影片任務完成</div>
-          </div>
-        </div>
-      `;
-    }
-
-    function setUnlockedUI(){
-      try{ localStorage.setItem(BADGE_KEY, "1"); }catch(e){}
-      if(pill){
-        pill.textContent = "✅ 已解鎖：低碳旅人";
-        pill.style.borderColor = "rgba(122,162,255,.55)";
-        pill.style.background = "rgba(122,162,255,.12)";
-      }
+    var ratio = video.currentTime / video.duration;
+    if(ratio >= 0.90){
+      setUnlockedUI();
+    }else{
       if(hint){
-        hint.innerHTML = "🎉 恭喜！你已解鎖 <b>低碳旅人</b> 徽章（已顯示在 Hero 區右上角）。";
+        hint.textContent = "觀看進度：" + Math.round(ratio * 100) + "%（達 90% 解鎖）";
       }
-      renderHeroBadge();
     }
+  }
 
-    function setLockedUI(){
-      if(pill){
-        pill.textContent = "🔒 尚未解鎖";
-        pill.style.borderColor = "";
-        pill.style.background = "";
-      }
-      if(hint){
-        hint.textContent = "請播放影片至 90%（或播完）即可解鎖徽章。";
-      }
-      renderHeroBadge();
-    }
+  video.addEventListener("timeupdate", checkProgress);
+  video.addEventListener("ended", function(){
+    if(!isUnlocked()) setUnlockedUI();
+  });
 
-    // init
+  window.addEventListener("storage", function(){
     if(isUnlocked()) setUnlockedUI();
     else setLockedUI();
+  });
+})();
+</script>
 
-    if(resetBtn){
-      resetBtn.onclick = function(){
-        try{ localStorage.removeItem(BADGE_KEY); }catch(e){}
-        setLockedUI();
-        if(video){
-          try{ video.currentTime = 0; }catch(e){}
-        }
-        alert("已重置徽章。重新看影片即可再解鎖。");
-      };
+<!-- ====== 即時翻譯：呼叫你的 Worker /translate ====== -->
+<script>
+(function(){
+  // ✅ 換成你的 Worker 網址（不要加 /translate）
+  var WORKER_URL = "https://quiet-heart-1355.thtsai820.workers.dev";
+
+  function $(id){ return document.getElementById(id); }
+
+  var inEl = $("transIn");
+  var outEl = $("transOut");
+  var toEl = $("transTo");
+  var btn = $("transBtn");
+  var demoBtn = $("transDemoBtn");
+  var copyBtn = $("copyBtn");
+  var status = $("transStatus");
+  var hint = $("transHint");
+
+  function setStatus(text, ok){
+    if(!status) return;
+    status.textContent = text;
+    status.style.borderColor = ok ? "rgba(122,162,255,.55)" : "rgba(255,255,255,.12)";
+    status.style.background = ok ? "rgba(122,162,255,.12)" : "rgba(255,255,255,.03)";
+  }
+
+  async function translate(){
+    var text = (inEl && inEl.value) ? inEl.value.trim() : "";
+    var to = (toEl && toEl.value) ? toEl.value : "en";
+    if(!text){
+      setStatus("🔴 請先輸入文字", false);
+      return;
     }
 
-    if(!video) return;
+    setStatus("🟡 翻譯中…", false);
+    if(hint) hint.textContent = "";
 
-    video.addEventListener("loadedmetadata", function(){
-      if(hint) hint.textContent = "影片已載入。播放達 90%（或播完）即可解鎖徽章。";
-    });
+    try{
+      var endpoint = WORKER_URL.replace(/\/$/,"") + "/translate";
+      var resp = await fetch(endpoint, {
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body: JSON.stringify({ text:text, to:to })
+      });
 
-    function checkProgress(){
-      if(isUnlocked()) return;
-      if(!video.duration || !isFinite(video.duration)) return;
+      var data = await resp.json();
 
-      var ratio = video.currentTime / video.duration;
-      if(ratio >= 0.90){
-        setUnlockedUI();
-      }else{
-        if(hint){
-          hint.textContent = "觀看進度：" + Math.round(ratio * 100) + "%（達 90% 解鎖）";
-        }
-      }
-    }
-
-    video.addEventListener("timeupdate", checkProgress);
-    video.addEventListener("ended", function(){
-      if(!isUnlocked()) setUnlockedUI();
-    });
-
-    window.addEventListener("storage", function(){
-      if(isUnlocked()) setUnlockedUI();
-      else setLockedUI();
-    });
-  })();
-
-  /* ========= 漫畫輪播（minai + kamate） ========= */
-  (function(){
-    var track = document.getElementById("kbTrack");
-    var prev = document.getElementById("kbPrev");
-    var next = document.getElementById("kbNext");
-    var auto = document.getElementById("kbAuto");
-    var dots = document.querySelectorAll(".kbDot");
-
-    if(!track || dots.length===0) return;
-
-    var idx = 0;
-    var timer = null;
-
-    function go(i){
-      idx = Math.max(0, Math.min(dots.length-1, i));
-      track.scrollTo({ left: track.clientWidth * idx, behavior: "smooth" });
-
-      for(var d=0; d<dots.length; d++){
-        dots[d].style.background =
-          (d===idx) ? "rgba(122,162,255,.8)" : "rgba(255,255,255,.12)";
-      }
-    }
-
-    function nextOne(){ go(idx + 1 > dots.length-1 ? 0 : idx + 1); }
-    function prevOne(){ go(idx - 1 < 0 ? dots.length-1 : idx - 1); }
-
-    if(next) next.onclick = nextOne;
-    if(prev) prev.onclick = prevOne;
-
-    for(var k=0;k<dots.length;k++){
-      dots[k].onclick = function(){
-        var i = parseInt(this.getAttribute("data-i"),10);
-        go(i);
-      };
-    }
-
-    function toggleAuto(){
-      if(timer){
-        clearInterval(timer);
-        timer = null;
-        if(auto) auto.textContent = "⏯ 自動";
-        return;
-      }
-      timer = setInterval(nextOne, 3500);
-      if(auto) auto.textContent = "⏸ 暫停";
-    }
-
-    if(auto) auto.onclick = toggleAuto;
-
-    var startX = 0;
-    track.addEventListener("touchstart", function(e){
-      startX = e.touches[0].clientX;
-    }, {passive:true});
-
-    track.addEventListener("touchend", function(e){
-      var endX = (e.changedTouches && e.changedTouches[0])
-        ? e.changedTouches[0].clientX : startX;
-
-      var dx = endX - startX;
-      if(Math.abs(dx) > 40){
-        if(dx < 0) nextOne(); else prevOne();
-      }
-    }, {passive:true});
-
-    window.addEventListener("resize", function(){ go(idx); });
-    go(0);
-  })();
-
-  /* ========= 即時翻譯：呼叫 Cloudflare Worker（Worker 內用 OpenAI 翻譯） ========= */
-  (function(){
-    // ✅ 改成你的 Worker 網址（不要加最後的 /translate）
-    var WORKER_URL = "https://quiet-heart-1355.thtsai820.workers.dev";
-
-    function $(id){ return document.getElementById(id); }
-
-    var inEl = $("transIn");
-    var outEl = $("transOut");
-    var toEl = $("transTo");
-    var btn = $("transBtn");
-    var demoBtn = $("transDemoBtn");
-    var copyBtn = $("copyBtn");
-    var status = $("transStatus");
-    var hint = $("transHint");
-
-    function setStatus(text, ok){
-      if(!status) return;
-      status.textContent = text;
-      status.style.borderColor = ok ? "rgba(122,162,255,.55)" : "rgba(255,255,255,.12)";
-      status.style.background = ok ? "rgba(122,162,255,.12)" : "rgba(255,255,255,.03)";
-    }
-
-    async function translate(){
-      var text = (inEl && inEl.value) ? inEl.value.trim() : "";
-      var to = (toEl && toEl.value) ? toEl.value : "en";
-
-      if(!text){
-        setStatus("🔴 請先輸入文字", false);
-        return;
+      if(!resp.ok || !data || data.ok !== true){
+        throw new Error((data && data.error) ? data.error : ("HTTP " + resp.status));
       }
 
-      setStatus("🟡 翻譯中…", false);
-      if(hint) hint.textContent = "";
+      if(outEl) outEl.value = data.translated || "";
+      setStatus("✅ 翻譯完成", true);
+      if(hint) hint.textContent = "已成功呼叫 Worker /translate。";
 
-      try{
-        var resp = await fetch(WORKER_URL + "/translate", {
-          method:"POST",
-          headers:{ "Content-Type":"application/json" },
-          body: JSON.stringify({ text:text, to:to })
-        });
-
-        var data = await resp.json();
-        if(!data || data.ok !== true){
-          throw new Error((data && data.error) ? data.error : "翻譯失敗");
-        }
-
-        if(outEl) outEl.value = data.translated || "";
-        setStatus("✅ 翻譯完成", true);
-        if(hint) hint.textContent = "已成功呼叫翻譯 API。";
-      }catch(e){
-        setStatus("🔴 翻譯失敗", false);
-        if(hint) hint.textContent = "錯誤：" + (e && e.message ? e.message : e);
-      }
+    }catch(e){
+      setStatus("🔴 翻譯失敗", false);
+      if(hint) hint.textContent = "錯誤：" + (e && e.message ? e.message : e);
     }
+  }
 
-    if(btn) btn.onclick = translate;
+  if(btn) btn.onclick = translate;
 
-    if(demoBtn) demoBtn.onclick = function(){
-      if(inEl) inEl.value = "蜜奶？（mi-nai）我想搭A線去莒光樓～";
-      setStatus("🟡 已塞入範例", false);
+  if(demoBtn) demoBtn.onclick = function(){
+    if(inEl) inEl.value = "蜜奶？（mi-nai）我想搭A線去莒光樓～";
+    setStatus("🟡 已塞入範例", false);
+  };
+
+  if(copyBtn) copyBtn.onclick = function(){
+    var t = outEl ? outEl.value : "";
+    if(!t) return;
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(function(){
+        setStatus("📋 已複製結果", true);
+      });
+    }else{
+      alert(t);
+    }
+  };
+
+  setStatus("🟡 尚未翻譯", false);
+})();
+</script>
+
+<!-- ====== 金門話漫畫輪播 JS ====== -->
+<script>
+(function(){
+  var track = document.getElementById("kbTrack");
+  var prev = document.getElementById("kbPrev");
+  var next = document.getElementById("kbNext");
+  var auto = document.getElementById("kbAuto");
+  var dots = document.querySelectorAll(".kbDot");
+
+  if(!track || !dots || dots.length===0) return;
+
+  var idx = 0;
+  var timer = null;
+
+  function go(i){
+    idx = Math.max(0, Math.min(dots.length-1, i));
+    track.scrollTo({ left: track.clientWidth * idx, behavior: "smooth" });
+
+    for(var d=0; d<dots.length; d++){
+      dots[d].style.background =
+        (d===idx) ? "rgba(122,162,255,.8)" : "rgba(255,255,255,.12)";
+    }
+  }
+
+  function nextOne(){
+    go(idx + 1 > dots.length-1 ? 0 : idx + 1);
+  }
+
+  function prevOne(){
+    go(idx - 1 < 0 ? dots.length-1 : idx - 1);
+  }
+
+  if(next) next.onclick = nextOne;
+  if(prev) prev.onclick = prevOne;
+
+  for(var k=0;k<dots.length;k++){
+    dots[k].onclick = function(){
+      var i = parseInt(this.getAttribute("data-i"),10);
+      go(i);
     };
+  }
 
-    if(copyBtn) copyBtn.onclick = function(){
-      var t = outEl ? outEl.value : "";
-      if(!t) return;
+  function toggleAuto(){
+    if(timer){
+      clearInterval(timer);
+      timer = null;
+      if(auto) auto.textContent = "⏯ 自動";
+      return;
+    }
+    timer = setInterval(nextOne, 3500);
+    if(auto) auto.textContent = "⏸ 暫停";
+  }
 
-      if(navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(t).then(function(){
-          setStatus("📋 已複製結果", true);
-        });
-      }else{
-        alert(t);
-      }
-    };
+  if(auto) auto.onclick = toggleAuto;
 
-    setStatus("🟡 尚未翻譯", false);
-  })();
+  var startX = 0;
+  track.addEventListener("touchstart", function(e){
+    startX = e.touches[0].clientX;
+  }, {passive:true});
+
+  track.addEventListener("touchend", function(e){
+    var endX = (e.changedTouches && e.changedTouches[0])
+      ? e.changedTouches[0].clientX : startX;
+
+    var dx = endX - startX;
+    if(Math.abs(dx) > 40){
+      if(dx < 0) nextOne(); else prevOne();
+    }
+  }, {passive:true});
+
+  window.addEventListener("resize", function(){ go(idx); });
+
+  go(0);
+})();
 </script>
 
 </body>
