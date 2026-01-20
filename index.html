@@ -38,6 +38,14 @@
     .notice{background:rgba(255,255,255,.04);border:1px dashed rgba(255,255,255,.18);border-radius:14px;padding:12px}
     .footer{opacity:.75;font-size:12px;line-height:1.6;margin:18px 0 8px}
     @media (max-width:860px){.grid3{grid-template-columns:1fr}.grid2{grid-template-columns:1fr}}
+
+    /* 翻譯卡片 */
+    .trans-box{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+    .trans-area{width:100%;min-height:120px;resize:vertical;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:#0f1120;color:#fff;font-size:16px}
+    select{width:100%;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:#0f1120;color:#fff;font-size:16px}
+    .kbtn{appearance:none;border:1px solid rgba(255,255,255,.12);background:#1d2140;color:#fff;border-radius:14px;padding:10px 12px;font-weight:900;cursor:pointer}
+    .kbtn.secondary{background:transparent}
+    @media (max-width:860px){.trans-box{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
@@ -135,10 +143,9 @@
     <div id="heroBadgeFloat" style="display:none"></div>
 
     <div class="row">
-      <div>
+      <div style="min-width:260px;max-width:640px;">
         <div class="pill">🚌 台灣好行金門縣｜A線主題</div>
         <h1>遊戲搭好行 金門樂遊玩到底</h1>
-
         <div class="sub">
           <b>玩得開心，也替金門減碳。</b><br/>
           搭台灣好行 A線完成任務、拿徽章、上排行榜。<br/>
@@ -257,73 +264,6 @@
   </div>
   <!-- ===== 低碳教育影片結束 ===== -->
 
-  <!-- ===== 即時翻譯（Cloudflare Worker + OpenAI）===== -->
-  <div class="card" id="translate">
-    <div class="row">
-      <div>
-        <div class="pill">🈶 即時翻譯</div>
-        <h2>金門話 / 中文 → 英文（或日文）</h2>
-        <div class="sub">
-          你輸入一句話（例如「蜜奶？」），按翻譯就會即時顯示結果。<br/>
-          之後也能把它串到「來聽金門話」漫畫，變成互動學習。
-        </div>
-        <div class="tags">
-          <span class="tag">雲端翻譯 API</span>
-          <span class="tag">手機可用</span>
-          <span class="tag">教學加分</span>
-        </div>
-      </div>
-      <div class="row" style="justify-content:flex-start">
-        <span class="pill" id="transStatus">🟡 尚未翻譯</span>
-      </div>
-    </div>
-
-    <div class="hr"></div>
-
-    <div class="trans-box">
-      <div>
-        <div class="tiny">輸入（中文/金門話）</div>
-        <textarea id="transIn" class="trans-area" placeholder="例如：蜜奶？ 我想搭A線去莒光樓～"></textarea>
-
-        <div class="row" style="justify-content:flex-start;margin-top:10px">
-          <select id="transTo">
-            <option value="en">英文</option>
-            <option value="ja">日文</option>
-          </select>
-        </div>
-
-        <div class="row" style="justify-content:flex-start;margin-top:10px">
-          <button class="kbtn" id="transBtn" type="button">⚡ 立即翻譯</button>
-          <button class="kbtn secondary" id="transDemoBtn" type="button">塞入範例：蜜奶？</button>
-        </div>
-
-        <div class="tiny muted" style="margin-top:10px">
-          若無反應：請確認 Worker 網址已填入程式碼中的 <b>WORKER_URL</b>。
-        </div>
-      </div>
-
-      <div>
-        <div class="tiny">翻譯結果</div>
-        <textarea id="transOut" class="trans-area" placeholder="結果會顯示在這裡" readonly></textarea>
-
-        <div class="row" style="justify-content:flex-start;margin-top:10px">
-          <button class="kbtn secondary" id="copyBtn" type="button">📋 複製結果</button>
-        </div>
-
-        <div class="tiny muted" style="margin-top:10px" id="transHint"></div>
-      </div>
-    </div>
-  </div>
-  <!-- ===== 即時翻譯結束 ===== -->
-
-  <style>
-    .trans-box{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-    .trans-area{width:100%;min-height:120px;resize:vertical;padding:10px 12px;border-radius:12px;border:1px solid rgba(255,255,255,.15);background:#0f1120;color:#fff;font-size:14px}
-    .kbtn{appearance:none;border:1px solid rgba(255,255,255,.12);background:#1d2140;color:#fff;border-radius:14px;padding:10px 12px;font-weight:900;cursor:pointer}
-    .kbtn.secondary{background:transparent}
-    @media (max-width:860px){.trans-box{grid-template-columns:1fr}}
-  </style>
-
   <!-- Games -->
   <div class="card" id="games">
     <div class="row">
@@ -392,7 +332,7 @@
         <div class="pill">🗣 來聽金門話｜漫畫輪播</div>
         <div class="sub">
           <b>蜜奶（mi-nai）＝什麼事？要做什麼？</b>
-          <span class="tiny muted">（左右滑 / 點箭頭）</span>
+          <span class="tiny">（左右滑 / 點箭頭）</span>
         </div>
       </div>
 
@@ -413,7 +353,6 @@
         scroll-behavior:smooth;
         border-radius:14px;
       ">
-
         <div class="kbSlide" style="min-width:100%">
           <img src="assets/img/minai.jpg" alt="金門話 蜜奶 漫畫"
             style="width:100%;max-width:380px;display:block;margin:0 auto;
@@ -425,7 +364,6 @@
             style="width:100%;max-width:380px;display:block;margin:0 auto;
                    border-radius:12px;border:1px solid rgba(255,255,255,.12);" />
         </div>
-
       </div>
 
       <div style="display:flex;gap:8px;justify-content:center;margin-top:10px">
@@ -440,12 +378,71 @@
                  background:rgba(255,255,255,.12);cursor:pointer"></span>
       </div>
 
-      <div class="tiny muted" style="margin-top:8px;text-align:center">
+      <div class="tiny" style="margin-top:8px;text-align:center">
         💡 之後可擴充：每一站一張漫畫，變成「每日金門話」！
       </div>
     </div>
   </div>
   <!-- ===== 輪播結束 ===== -->
+
+  <!-- ===== 即時翻譯（移到最下方）===== -->
+  <div class="card" id="translate">
+    <div class="row">
+      <div>
+        <div class="pill">🈶 即時翻譯</div>
+        <h2>金門話 / 中文 → 英文（或日文）</h2>
+        <div class="sub">
+          你輸入一句話（例如「蜜奶？」），按翻譯就會即時顯示結果。<br/>
+          （目前採用 Google 免費翻譯模式；之後要升級 OpenAI 我們再切換。）
+        </div>
+        <div class="tags">
+          <span class="tag">免金鑰</span>
+          <span class="tag">手機可用</span>
+          <span class="tag">教學加分</span>
+        </div>
+      </div>
+      <div class="row" style="justify-content:flex-start">
+        <span class="pill" id="transStatus">🟡 尚未翻譯</span>
+      </div>
+    </div>
+
+    <div class="hr"></div>
+
+    <div class="trans-box">
+      <div>
+        <div class="tiny">輸入（中文/金門話）</div>
+        <textarea id="transIn" class="trans-area" placeholder="例如：蜜奶？ 我想搭A線去莒光樓～"></textarea>
+
+        <div class="row" style="justify-content:flex-start;margin-top:10px">
+          <select id="transTo">
+            <option value="en">英文</option>
+            <option value="ja">日文</option>
+          </select>
+        </div>
+
+        <div class="row" style="justify-content:flex-start;margin-top:10px">
+          <button class="kbtn" id="transBtn" type="button">⚡ 立即翻譯</button>
+          <button class="kbtn secondary" id="transDemoBtn" type="button">塞入範例：蜜奶？</button>
+        </div>
+
+        <div class="tiny" style="margin-top:10px">
+          小提醒：這是免費模式，偶爾若被瀏覽器/網路擋住，重新整理再試一次即可。
+        </div>
+      </div>
+
+      <div>
+        <div class="tiny">翻譯結果</div>
+        <textarea id="transOut" class="trans-area" placeholder="結果會顯示在這裡" readonly></textarea>
+
+        <div class="row" style="justify-content:flex-start;margin-top:10px">
+          <button class="kbtn secondary" id="copyBtn" type="button">📋 複製結果</button>
+        </div>
+
+        <div class="tiny" style="margin-top:10px" id="transHint"></div>
+      </div>
+    </div>
+  </div>
+  <!-- ===== 即時翻譯結束 ===== -->
 
   <div class="footer">
     ※ 本頁為先行版行銷入口網站。若你要我下一步「把三遊戲做成同一個網站的 /games/... 結構（不跳 repo）」我也可以直接幫你改成多頁架構。
@@ -453,8 +450,9 @@
 
 </div><!-- /wrap -->
 
-<!-- ====== 遊戲卡片渲染 ====== -->
+<!-- ========== 1) 遊戲卡片渲染 + 按鈕 ========== -->
 <script>
+  // ====== 遊戲連結 ======
   const GAME_LINKS = {
     stamp:  "https://thtsai820-cpu.github.io/Tour/",
     shoot:  "https://thtsai820-cpu.github.io/car-race/",
@@ -521,23 +519,23 @@
     });
   }
 
-  var startBtn = document.getElementById("startBtn");
+  const startBtn = document.getElementById("startBtn");
   if(startBtn){
-    startBtn.onclick = function(){
+    startBtn.onclick = ()=>{
       window.open(GAME_LINKS.riddle + "?v=" + Date.now(), "_blank", "noopener,noreferrer");
     };
   }
 
-  var howBtn = document.getElementById("howBtn");
+  const howBtn = document.getElementById("howBtn");
   if(howBtn){
-    howBtn.onclick = function(){
-      var how = document.getElementById("how");
+    howBtn.onclick = ()=>{
+      const how = document.getElementById("how");
       if(how) how.scrollIntoView({behavior:"smooth", block:"start"});
     };
   }
 </script>
 
-<!-- ====== 影片解鎖徽章 + Hero 浮標 ====== -->
+<!-- ========== 2) 影片解鎖徽章 + Hero 右上角小徽章（縮小不重疊） ========== -->
 <script>
 (function(){
   var BADGE_KEY = "TM_BADGE_LOW_CARBON_V1";
@@ -561,30 +559,31 @@
     }
 
     heroFloat.style.display = "block";
-    heroFloat.innerHTML = ""
-      + "<div style='"
-      + "position:absolute; right:12px; top:12px;"
-      + "display:flex; align-items:center; gap:8px;"
-      + "padding:6px 8px;"
-      + "border-radius:12px;"
-      + "border:1px solid rgba(122,162,255,.55);"
-      + "background:rgba(122,162,255,.18);"
-      + "box-shadow:0 10px 22px rgba(0,0,0,.32);"
-      + "transform-origin: top right;"
-      + "transform: scale(.82);"
-      + "max-width:220px;"
-      + "'>"
-      + "  <div style='"
-      + "    width:28px;height:28px;border-radius:10px;"
-      + "    display:flex;align-items:center;justify-content:center;"
-      + "    background:rgba(0,0,0,.22);"
-      + "    font-size:16px;"
-      + "  '>🏅</div>"
-      + "  <div style='min-width:0'>"
-      + "    <div style='font-weight:1000;letter-spacing:.4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>低碳旅人</div>"
-      + "    <div style='font-size:12px;opacity:.86;white-space:nowrap;overflow:hidden;text-overflow:ellipsis'>已完成影片教育任務</div>"
-      + "  </div>"
-      + "</div>";
+    heroFloat.innerHTML = `
+      <div style="
+        position:absolute; right:10px; top:10px;
+        display:flex; align-items:center; gap:8px;
+        padding:6px 8px;
+        border-radius:12px;
+        border:1px solid rgba(122,162,255,.55);
+        background:rgba(122,162,255,.16);
+        box-shadow:0 10px 22px rgba(0,0,0,.30);
+        transform-origin: top right;
+        transform: scale(.78);
+        pointer-events:none;
+      ">
+        <div style="
+          width:28px;height:28px;border-radius:10px;
+          display:flex;align-items:center;justify-content:center;
+          background:rgba(0,0,0,.22);
+          font-size:16px;
+        ">🏅</div>
+        <div>
+          <div style="font-weight:1000;letter-spacing:.4px;line-height:1.1">低碳旅人</div>
+          <div style="font-size:12px;opacity:.86;line-height:1.1">影片任務完成</div>
+        </div>
+      </div>
+    `;
   }
 
   function setUnlockedUI(){
@@ -652,6 +651,7 @@
     if(!isUnlocked()) setUnlockedUI();
   });
 
+  // 同網域其他分頁若改了 localStorage，這裡也同步更新
   window.addEventListener("storage", function(){
     if(isUnlocked()) setUnlockedUI();
     else setLockedUI();
@@ -659,89 +659,7 @@
 })();
 </script>
 
-<!-- ====== 即時翻譯：呼叫你的 Worker /translate ====== -->
-<script>
-(function(){
-  // ✅ 換成你的 Worker 網址（不要加 /translate）
-  var WORKER_URL = "https://quiet-heart-1355.thtsai820.workers.dev";
-
-  function $(id){ return document.getElementById(id); }
-
-  var inEl = $("transIn");
-  var outEl = $("transOut");
-  var toEl = $("transTo");
-  var btn = $("transBtn");
-  var demoBtn = $("transDemoBtn");
-  var copyBtn = $("copyBtn");
-  var status = $("transStatus");
-  var hint = $("transHint");
-
-  function setStatus(text, ok){
-    if(!status) return;
-    status.textContent = text;
-    status.style.borderColor = ok ? "rgba(122,162,255,.55)" : "rgba(255,255,255,.12)";
-    status.style.background = ok ? "rgba(122,162,255,.12)" : "rgba(255,255,255,.03)";
-  }
-
-  async function translate(){
-    var text = (inEl && inEl.value) ? inEl.value.trim() : "";
-    var to = (toEl && toEl.value) ? toEl.value : "en";
-    if(!text){
-      setStatus("🔴 請先輸入文字", false);
-      return;
-    }
-
-    setStatus("🟡 翻譯中…", false);
-    if(hint) hint.textContent = "";
-
-    try{
-      var endpoint = WORKER_URL.replace(/\/$/,"") + "/translate";
-      var resp = await fetch(endpoint, {
-        method:"POST",
-        headers:{ "Content-Type":"application/json" },
-        body: JSON.stringify({ text:text, to:to })
-      });
-
-      var data = await resp.json();
-
-      if(!resp.ok || !data || data.ok !== true){
-        throw new Error((data && data.error) ? data.error : ("HTTP " + resp.status));
-      }
-
-      if(outEl) outEl.value = data.translated || "";
-      setStatus("✅ 翻譯完成", true);
-      if(hint) hint.textContent = "已成功呼叫 Worker /translate。";
-
-    }catch(e){
-      setStatus("🔴 翻譯失敗", false);
-      if(hint) hint.textContent = "錯誤：" + (e && e.message ? e.message : e);
-    }
-  }
-
-  if(btn) btn.onclick = translate;
-
-  if(demoBtn) demoBtn.onclick = function(){
-    if(inEl) inEl.value = "蜜奶？（mi-nai）我想搭A線去莒光樓～";
-    setStatus("🟡 已塞入範例", false);
-  };
-
-  if(copyBtn) copyBtn.onclick = function(){
-    var t = outEl ? outEl.value : "";
-    if(!t) return;
-    if(navigator.clipboard && navigator.clipboard.writeText){
-      navigator.clipboard.writeText(t).then(function(){
-        setStatus("📋 已複製結果", true);
-      });
-    }else{
-      alert(t);
-    }
-  };
-
-  setStatus("🟡 尚未翻譯", false);
-})();
-</script>
-
-<!-- ====== 金門話漫畫輪播 JS ====== -->
+<!-- ========== 3) 漫畫輪播 ========== -->
 <script>
 (function(){
   var track = document.getElementById("kbTrack");
@@ -750,7 +668,7 @@
   var auto = document.getElementById("kbAuto");
   var dots = document.querySelectorAll(".kbDot");
 
-  if(!track || !dots || dots.length===0) return;
+  if(!track || dots.length===0) return;
 
   var idx = 0;
   var timer = null;
@@ -765,13 +683,8 @@
     }
   }
 
-  function nextOne(){
-    go(idx + 1 > dots.length-1 ? 0 : idx + 1);
-  }
-
-  function prevOne(){
-    go(idx - 1 < 0 ? dots.length-1 : idx - 1);
-  }
+  function nextOne(){ go(idx + 1 > dots.length-1 ? 0 : idx + 1); }
+  function prevOne(){ go(idx - 1 < 0 ? dots.length-1 : idx - 1); }
 
   if(next) next.onclick = nextOne;
   if(prev) prev.onclick = prevOne;
@@ -793,7 +706,6 @@
     timer = setInterval(nextOne, 3500);
     if(auto) auto.textContent = "⏸ 暫停";
   }
-
   if(auto) auto.onclick = toggleAuto;
 
   var startX = 0;
@@ -812,8 +724,99 @@
   }, {passive:true});
 
   window.addEventListener("resize", function(){ go(idx); });
-
   go(0);
+})();
+</script>
+
+<!-- ========== 4) 即時翻譯（Google 免費模式） ========== -->
+<script>
+(function(){
+  function $(id){ return document.getElementById(id); }
+
+  var inEl = $("transIn");
+  var outEl = $("transOut");
+  var toEl = $("transTo");
+  var btn = $("transBtn");
+  var demoBtn = $("transDemoBtn");
+  var copyBtn = $("copyBtn");
+  var status = $("transStatus");
+  var hint = $("transHint");
+
+  function setStatus(text, ok){
+    if(!status) return;
+    status.textContent = text;
+    status.style.borderColor = ok ? "rgba(122,162,255,.55)" : "rgba(255,255,255,.12)";
+    status.style.background = ok ? "rgba(122,162,255,.12)" : "rgba(255,255,255,.03)";
+  }
+
+  async function googleTranslate(text, to){
+    const url =
+      "https://translate.googleapis.com/translate_a/single" +
+      "?client=gtx" +
+      "&sl=auto" +
+      "&tl=" + encodeURIComponent(to) +
+      "&dt=t" +
+      "&q=" + encodeURIComponent(text);
+
+    const res = await fetch(url);
+    const data = await res.json();
+
+    let result = "";
+    if(data && data[0] && Array.isArray(data[0])){
+      data[0].forEach(seg => { if(seg && seg[0]) result += seg[0]; });
+    }
+    return result || "";
+  }
+
+  async function translate(){
+    var text = (inEl && inEl.value) ? inEl.value.trim() : "";
+    var to = (toEl && toEl.value) ? toEl.value : "en";
+
+    if(!text){
+      setStatus("🔴 請先輸入文字", false);
+      return;
+    }
+
+    setStatus("🟡 翻譯中…", false);
+    if(hint) hint.textContent = "";
+
+    try{
+      const translated = await googleTranslate(text, to);
+      if(!translated){
+        setStatus("🔴 翻譯失敗", false);
+        if(hint) hint.textContent = "沒有取得翻譯結果（可能被網路/瀏覽器阻擋）。";
+        return;
+      }
+      if(outEl) outEl.value = translated;
+      setStatus("✅ 翻譯完成（Google）", true);
+      if(hint) hint.textContent = "目前為免費 Google 翻譯模式（之後可升級 OpenAI）。";
+    }catch(e){
+      setStatus("🔴 翻譯失敗", false);
+      if(hint) hint.textContent = "錯誤：" + (e && e.message ? e.message : e);
+    }
+  }
+
+  if(btn) btn.onclick = translate;
+
+  if(demoBtn) demoBtn.onclick = function(){
+    if(inEl) inEl.value = "蜜奶？我想搭A線去莒光樓～";
+    setStatus("🟡 已塞入範例", false);
+  };
+
+  if(copyBtn) copyBtn.onclick = function(){
+    var t = outEl ? outEl.value : "";
+    if(!t) return;
+
+    if(navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(t).then(function(){
+        setStatus("📋 已複製結果", true);
+      });
+    }else{
+      alert(t);
+    }
+  };
+
+  setStatus("🟡 尚未翻譯（Google 模式）", false);
 })();
 </script>
 
